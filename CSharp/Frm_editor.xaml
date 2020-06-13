@@ -15,15 +15,22 @@
                 <ColumnDefinition Width="0.8*"/>
                 <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
+        
+            <StackPanel Grid.Column="0">
+                <Button x:Name="Btn_dec" Click="Btn_dec_Click" Margin="10">Увеличить</Button>
+                <Button x:Name="Btn_inc" Click="Btn_inc_Click" Margin="10">Уменьшить</Button>
 
+                <Button x:Name="Btn_polyline" Margin="10" Click="Btn_polyline_Click">Контур</Button>
+            </StackPanel>      
             
-                <Canvas Grid.Column="1" x:Name="Background"
+            <Canvas Grid.Column="1" x:Name="MainCanvas" Margin="20 20 20 100" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp" >
+                <Canvas  x:Name="Background"
                         Width="{Binding ActualWidth, ElementName=MainCanvas}"
                         Height="{Binding ActualHeight, ElementName=MainCanvas}"
-                        SizeChanged="UpdateBackPattern"/>   
-                <Canvas Grid.Column="1" x:Name="MainCanvas" Margin="0 20"/>
-           
-           
+                        SizeChanged="UpdateBackPattern" />
+            </Canvas>
+
+
         </Grid>
     </ScrollViewer>
 </Window>

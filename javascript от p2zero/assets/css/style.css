@@ -1,0 +1,58 @@
+.container{
+	margin: 0 20%;
+}
+h1{
+	color: #48085f;
+	font-size: 2.5rem;
+}
+
+p
+{
+	color: #0c2551;
+}
+.zad{
+	color: #f84088;
+}
+
+hr
+{
+	color: #0c2551;
+	border-width: 2px;
+}
+#t8_parol{
+	visibility: collapse;
+	margin-top: 1%;
+}
+
+input{
+	width: 20%;
+}
+
+#t15, #t16, #t17
+{
+	width: 30%;
+}
+
+#t22_
+{
+	width: 45%;
+}
+
+#place_input, #city_input, #numbs_input,#mas_numbs_input{
+	margin-top: 1%;
+}
+.mas, .numbs, .numbs_task_24{
+	width: 30px;
+	margin-right: 5px;
+}
+
+.sities{
+	width: 100px;
+	margin-right: 2px;
+}
+
+button{
+	font-weight: bold;
+	color: #0c2f08;
+	background: #caf0c6
+}

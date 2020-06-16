@@ -7,29 +7,50 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"        
         WindowState="Maximized"    
-        Title="Frm_editor" Width="1500" Height="800">
+        Title="Frm_editor" Width="1500" Height="800" KeyDown="Window_KeyDown" Loaded="Window_Loaded"  >
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
-                <ColumnDefinition Width="0.8*"/>
-                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.9*"/>
+                
             </Grid.ColumnDefinitions>
         
             <StackPanel Grid.Column="0">
                 <Button x:Name="Btn_dec" Click="Btn_dec_Click" Margin="10">Увеличить</Button>
                 <Button x:Name="Btn_inc" Click="Btn_inc_Click" Margin="10">Уменьшить</Button>
-
                 <Button x:Name="Btn_polyline" Margin="10" Click="Btn_polyline_Click">Контур</Button>
-            </StackPanel>      
-            
-            <Canvas Grid.Column="1" x:Name="MainCanvas" Margin="20 20 20 100" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp" >
-                <Canvas  x:Name="Background"
-                        Width="{Binding ActualWidth, ElementName=MainCanvas}"
-                        Height="{Binding ActualHeight, ElementName=MainCanvas}"
-                        SizeChanged="UpdateBackPattern" />
-            </Canvas>
+                <Button x:Name="Btn_del" Margin="10" Click="Btn_del_Click">Очистить</Button>
+                <Button x:Name="Btn_sim" Margin="10" Click="Btn_sim_Click">Симметрия</Button>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>X</Label>
+                        <TextBox x:Name="TB_X" MinWidth="40">0</TextBox>
+                        <Label>Y</Label>
+                        <TextBox x:Name="TB_Y" MinWidth="40">0</TextBox>
+                    </StackPanel>
+                    <Button x:Name="Btn_point" Margin="10" Click="Btn_point_Click">Точка</Button>
+                </StackPanel>
 
+                <StackPanel>
+                    <Label>Деталь</Label>
+                    <TextBox x:Name="TB_Name" KeyDown="TB_Name_KeyDown" ></TextBox>
+                    <Label>Детали:</Label>
+                    <ListBox x:Name="LB_names"> </ListBox>
+                    <Button x:Name="Btn_save_det" Margin="10" Click="Btn_save_det_Click">Сохранить координаты</Button>
+                </StackPanel>
+            </StackPanel>
+
+
+            <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 20 40" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp">
+               
+                    <Canvas   x:Name="Background"
+                            Width="{Binding ActualWidth, ElementName=MainCanvas}"
+                            Height="{Binding ActualHeight, ElementName=MainCanvas}"
+                            SizeChanged="UpdateBackPattern"  />
+                
+            </Canvas>
+           
 
         </Grid>
     </ScrollViewer>

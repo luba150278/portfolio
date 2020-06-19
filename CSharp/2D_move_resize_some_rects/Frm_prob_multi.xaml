@@ -1,0 +1,19 @@
+﻿<Window x:Class="GoToKnit_.Frm_prob_multi"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoToKnit_"
+        mc:Ignorable="d"
+         WindowStartupLocation="CenterScreen"        
+        WindowState="Maximized"   
+        Title="Frm_prob_multi" Height="650" Width="1500" Loaded="Window_Loaded" >
+    <Grid>
+        <Canvas x:Name="canvas_1" Background="#00F5EAEA" MouseDown="canvas_1_MouseDown" MouseMove="canvas_1_MouseMove" MouseUp="canvas_1_MouseUp">
+
+            <Rectangle Canvas.Left="100" Canvas.Top="100" x:Name="rect1" Fill="LightBlue" Width="800" Height="400" />
+            <Rectangle Canvas.Left="150" Canvas.Top="150" x:Name="rect2" Fill="Bisque" Width="200" Height="200" />
+            <Rectangle Canvas.Left="350" Canvas.Top="350" x:Name="rect3" Fill="IndianRed" Width="200" Height="200" />
+        </Canvas>
+    </Grid>
+</Window>

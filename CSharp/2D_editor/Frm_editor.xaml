@@ -7,7 +7,16 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"        
         WindowState="Maximized"    
-        Title="Frm_editor" Width="1500" Height="800" KeyDown="Window_KeyDown" Loaded="Window_Loaded"  >
+        Title="Frm_editor" Width="1500" Height="800" KeyDown="Window_KeyDown" Loaded="Window_Loaded" MouseRightButtonDown="Window_MouseRightButtonDown"  >
+    <Window.Resources>
+        <ContextMenu x:Key="cmButton">
+            <MenuItem Header="Menu item 1" />
+            <MenuItem Header="Menu item 2" />
+            <Separator />
+            <MenuItem Header="Menu item 3" />
+        </ContextMenu>
+    </Window.Resources>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
             <Grid.ColumnDefinitions>
@@ -38,6 +47,8 @@
                     <Label>Детали:</Label>
                     <ListBox x:Name="LB_names"> </ListBox>
                     <Button x:Name="Btn_save_det" Margin="10" Click="Btn_save_det_Click">Сохранить координаты</Button>
+                    <Label x:Name="LB_koord"></Label>
+
                 </StackPanel>
             </StackPanel>
 

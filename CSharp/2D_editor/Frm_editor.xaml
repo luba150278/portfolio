@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GoToKnit_"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"        
-        WindowState="Maximized"    
+        WindowState="Maximized" 
+        WindowStyle="ToolWindow"
         Title="Frm_editor" Width="1500" Height="800" KeyDown="Window_KeyDown" Loaded="Window_Loaded" MouseRightButtonDown="Window_MouseRightButtonDown"  >
     <Window.Resources>
         <ContextMenu x:Key="cmButton">
@@ -20,37 +21,66 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.1*"/>
-                <ColumnDefinition Width="0.9*"/>
+                <ColumnDefinition Width="0.05*"/>
+                <ColumnDefinition Width="0.95*"/>
                 
             </Grid.ColumnDefinitions>
         
             <StackPanel Grid.Column="0">
-                <Button x:Name="Btn_dec" Click="Btn_dec_Click" Margin="10">Увеличить</Button>
-                <Button x:Name="Btn_inc" Click="Btn_inc_Click" Margin="10">Уменьшить</Button>
-                <Button x:Name="Btn_polyline" Margin="10" Click="Btn_polyline_Click">Контур</Button>
-                <Button x:Name="Btn_del" Margin="10" Click="Btn_del_Click">Очистить</Button>
-                <Button x:Name="Btn_sim" Margin="10" Click="Btn_sim_Click">Симметрия</Button>
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label>X</Label>
+                <!--<Button x:Name="Btn_dec" Click="Btn_dec_Click" Margin="10">Увеличить</Button>-->
+                <!--<Button x:Name="Btn_inc" Click="Btn_inc_Click" Margin="10">Уменьшить</Button>-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="Btn_grid"  MaxWidth="40" Margin="5" ToolTip="Показать/скрыть сетку" Click="Btn_grid_Click" MouseEnter="Btn_grid_MouseEnter" MouseLeave="Btn_grid_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Image  x:Name="Img_grid" Source="Resources/border.png" Margin="2" Height="30" />
+                    </Button>
+                    
+                    <Button x:Name="Btn_del" MaxWidth="40" Margin="5" Click="Btn_del_Click" ToolTip="Очистить холст" MouseEnter="Btn_del_MouseEnter" MouseLeave="Btn_del_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0" >
+                        <Image  x:Name="Img_del" Source="Resources/delete.png" Margin="2" Height="30" />
+                    </Button>
+
+                     <Button x:Name="Btn_save_det" MaxWidth="40"  Margin="5" Click="Btn_save_det_Click" ToolTip="Сохранить как деталь выкройки" MouseEnter="Btn_save_det_MouseEnter" MouseLeave="Btn_save_det_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Image  x:Name="Img_save" Source="Resources/save.png" Margin="2" Height="30" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button MaxHeight="40" x:Name="Btn_point" Margin="5" Click="Btn_point_Click" ToolTip="Добавить точку/конец отрезка" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Image  x:Name="Img_point" Source="Resources/points.png" Margin="2" Height="30" />
+                    </Button>
+
+                    <StackPanel Margin="5" Orientation="Vertical">
+                        <Label >X</Label>
                         <TextBox x:Name="TB_X" MinWidth="40">0</TextBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="5" Orientation="Vertical">
                         <Label>Y</Label>
                         <TextBox x:Name="TB_Y" MinWidth="40">0</TextBox>
                     </StackPanel>
-                    <Button x:Name="Btn_point" Margin="10" Click="Btn_point_Click">Точка</Button>
                 </StackPanel>
+
+                <Button x:Name="Btn_sim" MaxWidth="40" Margin="5" ToolTip="Симметрия детали. Только для разомкнутого контура!" Click="Btn_sim_Click" MouseEnter="Btn_sim_MouseEnter" MouseLeave="Btn_sim_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                    <Image  x:Name="Img_sim" Source="Resources/sim.png" Margin="2" Height="30" />
+                </Button>
+
+
+
+
+
 
                 <StackPanel>
                     <Label>Деталь</Label>
                     <TextBox x:Name="TB_Name" KeyDown="TB_Name_KeyDown" ></TextBox>
                     <Label>Детали:</Label>
                     <ListBox x:Name="LB_names"> </ListBox>
-                    <Button x:Name="Btn_save_det" Margin="10" Click="Btn_save_det_Click">Сохранить координаты</Button>
+                    
+                    <Button x:Name="Btn_show_det" Margin="10" Click="Btn_show_det_Click">Посмотреть координаты</Button>
                     <Label x:Name="LB_koord"></Label>
 
                 </StackPanel>
+                
             </StackPanel>
+            
 
 
             <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 20 40" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp">

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace GoToKnit_
 {
@@ -38,11 +39,12 @@ namespace GoToKnit_
         List<Points_new> pnts = new List<Points_new>();
         List<Points_new> list_main = new List<Points_new>();
         List<Koord> list_det = new List<Koord>();
-        private List<Ellipse> ellipses;
+       
         List<Point> tocki;
         bool prov_poligon = false;
         double BG_korr;
         Polygon main_polygon;
+        bool bg_clear = true;
         public Frm_editor()
 		{
 			InitializeComponent();
@@ -117,7 +119,8 @@ namespace GoToKnit_
 
           
             int z = 1;
-            Background.Children.Clear();
+            //var bg = Background.Children.OfType<Line>().ToList();
+            //foreach(Line ln in bg) Background.Children.Remove(ln);
            
             for (double x = 0; x < w; x += ris)
             {
@@ -160,7 +163,14 @@ namespace GoToKnit_
             };
             line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
             Background.Children.Add(line);
-            
+            var bg = Background.Children.OfType<Line>().ToList();
+            foreach (Line ln in bg) Panel.SetZIndex(ln, 0);
+
+            Panel.SetZIndex(Background, 0);
+            var pg = Background.Children.OfType<Polygon>().ToList();
+            foreach (Polygon pg1 in pg) Panel.SetZIndex(pg1, 9999);
+            var el = Background.Children.OfType<Ellipse>().ToList();
+            foreach (Ellipse el1 in el) Panel.SetZIndex(el1, 9999);
         }
 
         private void Tb_forline(string mstr, bool rot, double x, double y, Color clr)// текстовые надписи
@@ -274,6 +284,7 @@ namespace GoToKnit_
 
         private void Btn_polyline_Click(object sender, RoutedEventArgs e)
         {
+            Pixel_to_koord();
             string str = "";
             try
             {
@@ -286,7 +297,6 @@ namespace GoToKnit_
 
                 //MessageBox.Show(""+Background.Children.OfType<Ellipse>().Count());
             }
-
             catch { }
 
             
@@ -307,11 +317,20 @@ namespace GoToKnit_
                 list_main = new List<Points_new>();
                 count_pnts = 1;
                 prov_poligon = false;
-                ellipses = new List<Ellipse>();
+                
+                if (LB_names.SelectedIndex!=-1)
+                {
+                    int index = LB_names.SelectedIndex;
+                    string det = LB_names.SelectedItem.ToString();
+                    list_det.RemoveAll(x => x.det == det);
+                   
+                    LB_names.Items.Remove(LB_names.SelectedItem);
+                }
+                list_main.Clear();
             }
             Background.Children.Clear();
-            //UpdateBackPattern(null, null);
-            
+            UpdateBackPattern(null, null);
+
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -333,6 +352,12 @@ namespace GoToKnit_
             if(e.Key == Key.LeftCtrl)
             {
                 Draw_sim();
+            }
+            if(e.Key==Key.Escape)
+            {
+                Esc_call();
+               var tb= MainCanvas.Children.OfType<TextBlock>().ToList();
+                foreach (TextBlock tb1 in tb) MainCanvas.Children.Remove(tb1);
             }
         }
 
@@ -473,6 +498,7 @@ namespace GoToKnit_
                    if( LB_names.Items[i].ToString().ToLower() == TB_Name.Text.ToLower())
                    {
                         LB_names.SelectedIndex = i;
+                        Save_det();
                         return;
                    }
                 }
@@ -480,37 +506,49 @@ namespace GoToKnit_
             }
         }
 
-        private void Btn_save_det_Click(object sender, RoutedEventArgs e)
+        void Save_det()
         {
+            Pixel_to_koord();
             bool prov_exist_koord = false;
-            if (LB_names.SelectedIndex == -1)
+            if (LB_names.Items.Count > 0)
             {
-                MessageBox.Show("Выберите деталь из спискаили добавьте деталь в список");
-                return;
+                if (LB_names.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Выберите деталь из списка или добавьте деталь в список");
+                    return;
+                }
+                else
+                {
+                    string det = LB_names.SelectedItem.ToString();
+                    if (list_det.Count > 0)
+                    {
+                        List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
+                        if (prov.Count > 0)
+                        {
+                            MessageBoxResult qu = MessageBox.Show("Для данной детали координаты уже введены. Обновить данные?", "Сохранить координаты детали", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            switch (qu)
+                            {
+                                case MessageBoxResult.Yes:
+                                    prov_exist_koord = true;
+                                    break;
+                                case MessageBoxResult.No:
+                                    return;
+
+                            }
+                        }
+                    }
+
+                    Add_koord_det(det, prov_exist_koord);
+                }
             }
             else
             {
-                string det = LB_names.SelectedItem.ToString();
-                if(list_det.Count>0)
-                {
-                    List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
-                    if (prov.Count > 0)
-                    {
-                        MessageBoxResult qu = MessageBox.Show("Для данной детали координаты уже введены. Обновить данные?", "Сохранить координаты детали", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        switch (qu)
-                        {
-                            case MessageBoxResult.Yes:
-                                prov_exist_koord = true;
-                                break;
-                            case MessageBoxResult.No:
-                                return;
-                              
-                        }
-                    }
-                }
-
-                Add_koord_det(det, prov_exist_koord);
+                MessageBox.Show("Введите название первой детали");
             }
+        }
+        private void Btn_save_det_Click(object sender, RoutedEventArgs e)
+        {
+            Save_det();
         }
 
         private void Add_koord_det(string det, bool prov)//prov ==true деталь уже есть. Обновляем данные
@@ -519,6 +557,8 @@ namespace GoToKnit_
             {
                 list_det.RemoveAll(x => x.det == det);
             }
+
+            MessageBox.Show(""+ list_main.Count);
             for(int i=0; i<list_main.Count;i++)
             {
                 list_det.Add(new Koord(list_main[i].n, list_main[i].X, list_main[i].Y, det)) ;
@@ -527,25 +567,23 @@ namespace GoToKnit_
         }
 
 
-        private void Draw_poligon()
+        private void Pixel_to_koord()
         {
-            int num_min=0;
+            int num_min = 0;
             int perv_chas;
             int k = 1;
            
-            if (prov_poligon == false)
-            {
                 list_main = new List<Points_new>();
-                
+
                 List<Points_new> list_pnts = new List<Points_new>();
-                for (int i = 0; i < pnts.Count; i++)
+                for (int i = 0; i < main_polygon.Points.Count; i++)
                 {
-                    list_pnts.Add(new Points_new(pnts[i].n, pnts[i].X / 10, (BG_korr - pnts[i].Y) / 10));
+                    list_pnts.Add(new Points_new(i+1, main_polygon.Points[i].X / 10, (BG_korr - main_polygon.Points[i].Y) / 10));
                 }
-               
-                double y= list_pnts.AsQueryable().Min(x => x.Y);
-                List<Points_new> list_prov=list_pnts.FindAll(item => item.Y == y);
-                
+
+                double y = list_pnts.AsQueryable().Min(x => x.Y);
+                List<Points_new> list_prov = list_pnts.FindAll(item => item.Y == y);
+
                 if (list_prov.Count == 1)
                 {
                     num_min = list_prov[0].n;
@@ -556,24 +594,24 @@ namespace GoToKnit_
                     list_prov = list_prov.FindAll(item => item.X == x);
                     num_min = list_prov[0].n;
                 }
-                
-                if(num_min==1)//первая точка - точка минимума
+
+                if (num_min == 1)//первая точка - точка минимума
                 {
-                    if(list_pnts[1].X<list_pnts[list_pnts.Count-1].X && Math.Abs(list_pnts[list_pnts.Count - 1].X- list_pnts[1].X) >0.5)
+                    if (list_pnts[1].X < list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[list_pnts.Count - 1].X - list_pnts[1].X) > 0.5)
                     {
                         perv_chas = list_pnts[1].n;
                     }
-                    else if(list_pnts[1].X > list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[1].X- list_pnts[list_pnts.Count - 1].X) > 0.5) { perv_chas = list_pnts[list_pnts.Count - 1].n; }
+                    else if (list_pnts[1].X > list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[1].X - list_pnts[list_pnts.Count - 1].X) > 0.5) { perv_chas = list_pnts[list_pnts.Count - 1].n; }
                     else
                     {//равная координата х
 
-                        if (list_pnts[1].Y> list_pnts[list_pnts.Count - 1].Y) { perv_chas = list_pnts[1].n; }
+                        if (list_pnts[1].Y > list_pnts[list_pnts.Count - 1].Y) { perv_chas = list_pnts[1].n; }
                         else { perv_chas = list_pnts[list_pnts.Count - 1].n; }
                     }
                 }
                 else
                 {
-                    if(num_min == list_pnts[list_pnts.Count-1].n)//последняя точка
+                    if (num_min == list_pnts[list_pnts.Count - 1].n)//последняя точка
                     {
                         if (list_pnts[0].X < list_pnts[list_pnts.Count - 2].X)
                         {
@@ -583,11 +621,11 @@ namespace GoToKnit_
                     }
                     else
                     {
-                        if (list_pnts[num_min-2].X < list_pnts[num_min].X && (Math.Abs(list_pnts[num_min].X- list_pnts[num_min - 2].X) > 0.5))
+                        if (list_pnts[num_min - 2].X < list_pnts[num_min].X && (Math.Abs(list_pnts[num_min].X - list_pnts[num_min - 2].X) > 0.5))
                         {
                             perv_chas = list_pnts[num_min - 2].n;
                         }
-                        else if(list_pnts[num_min - 2].X > list_pnts[num_min].X && (Math.Abs(list_pnts[num_min - 2].X- list_pnts[num_min].X) >0.5)) { perv_chas = list_pnts[num_min].n; }
+                        else if (list_pnts[num_min - 2].X > list_pnts[num_min].X && (Math.Abs(list_pnts[num_min - 2].X - list_pnts[num_min].X) > 0.5)) { perv_chas = list_pnts[num_min].n; }
                         else
                         {//равная координата х
 
@@ -602,7 +640,7 @@ namespace GoToKnit_
                 list_main.Add(new Points_new(k, list_prov[0].X, list_prov[0].Y));
                 k++;
                 //MessageBox.Show("num" + num_min + "ch" + perv_chas);
-                if(num_min<perv_chas)
+                if (num_min < perv_chas)
                 {
                     if (perv_chas != list_pnts.Count)
                     {
@@ -622,7 +660,7 @@ namespace GoToKnit_
                         }
                     }
                     else
-                    {                       
+                    {
                         for (int i = perv_chas - 1; i >= 0; i--)
                         {
                             if (i + 1 != num_min)
@@ -647,7 +685,7 @@ namespace GoToKnit_
                         }
                         else
                         {
-                            for (int i =0; i <= num_min-2; i++)
+                            for (int i = 0; i <= num_min - 2; i++)
                             {
                                 list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
                                 k++;
@@ -656,57 +694,75 @@ namespace GoToKnit_
                     }
                     else
                     {
-                        for (int i = perv_chas - 1; i==0; i--)
+                        for (int i = perv_chas - 1; i == 0; i--)
                         {
                             list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
                             k++;
                         }
 
-                        for(int i= list_pnts.Count - 1;i>=num_min;i--)
+                        for (int i = list_pnts.Count - 1; i >= num_min; i--)
                         {
                             list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
                             k++;
                         }
                     }
                 }
-            }
+            
+        }
 
-            main_polygon = new Polygon();
-            main_polygon.Stroke = Brushes.Black;
-            main_polygon.StrokeThickness = 2;
-
-           
-            Point[] pts = new Point[pnts.Count];
-            PointCollection myPointCollection = new PointCollection();
-
-            for (int i = 0; i < pnts.Count; i++)
+        private void Draw_poligon()
+        {
+            if (prov_poligon == false)
             {
-                pts[i] = new Point(pnts[i].X, pnts[i].Y);
-                myPointCollection.Add(pts[i]);
+                main_polygon = new Polygon();
+                main_polygon.Stroke = Brushes.Black;
+                main_polygon.StrokeThickness = 2;
+
+                Point[] pts = new Point[pnts.Count];
+                PointCollection myPointCollection = new PointCollection();
+
+                for (int i = 0; i < pnts.Count; i++)
+                {
+                    pts[i] = new Point(pnts[i].X, pnts[i].Y);
+                    myPointCollection.Add(pts[i]);
+                }
+
+                main_polygon.Points = myPointCollection;
+
+
+                Background.Children.Add(main_polygon);
+                Add_polygon_events();
+                polyline = null;
+                //main_polygon = myPolygon;
+                //main_polygon.Stroke=Brushes.Black;
+                //main_polygon.StrokeThickness = 2;
+
+                var fld = Background.Children.OfType<Polyline>().ToList();
+                foreach (Polyline fld_d in fld) Background.Children.Remove(fld_d);
+
+                var el = Background.Children.OfType<Ellipse>().ToList();
+                foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);
+
+                for (int i = 0; i < pnts.Count; i++)
+                {
+                    Make_ellipse(pts[i].X, pts[i].Y);
+                }
+
+                Ellip_events();
             }
+        }
 
-            main_polygon.Points = myPointCollection;
-
-
-            Background.Children.Add(main_polygon);
-            Add_polygon_events();
-            polyline = null;
-            //main_polygon = myPolygon;
-            //main_polygon.Stroke=Brushes.Black;
-            //main_polygon.StrokeThickness = 2;
-
-            var fld = Background.Children.OfType<Polyline>().ToList();
-            foreach (Polyline fld_d in fld) Background.Children.Remove(fld_d);
-
+        void Esc_call()
+        {
             var el = Background.Children.OfType<Ellipse>().ToList();
             foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);
-
-            for (int i = 0; i < pnts.Count; i++)
+            for (int i = 0; i < main_polygon.Points.Count; i++)
             {
-                Make_ellipse(pts[i].X, pts[i].Y);
+                Make_ellipse(main_polygon.Points[i].X, main_polygon.Points[i].Y);
             }
 
-            Ellip_events();           
+            Ellip_events();
+
         }
 
         void Add_polygon_events()
@@ -721,10 +777,9 @@ namespace GoToKnit_
             isDragging = false;
             int i = 0;
             var el = Background.Children.OfType<Ellipse>().ToList();
-            ellipses = new List<Ellipse>();
+           
             foreach (Ellipse el_ch in el)
-            {
-                ellipses.Add(el_ch);
+            {                
                 el_ch.MouseLeftButtonDown += new MouseButtonEventHandler(Elipce_MouseLeftButtonDown);
                 el_ch.MouseMove += new MouseEventHandler(Elipce_MouseMove);
                 el_ch.MouseLeftButtonUp += new MouseButtonEventHandler(Ellipce_MouseLeftButtonUp);
@@ -742,93 +797,115 @@ namespace GoToKnit_
 
         private void Elipce_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
-            prevX = 0;
-            prevY = 0;
-
-            var draggableControl = (sender as Ellipse);
-
-            if (draggableControl.Fill == Brushes.Black)
+            //MessageBox.Show("" + pnts.Count);
+            try
             {
-                draggableControl.Fill = Brushes.Red;
-                draggableControl.Stroke = Brushes.Red;
-                isDragging = true;
-                var canvas = MainCanvas;
-                mousePosition = e.GetPosition(canvas);
-                draggableControl.CaptureMouse();
-                index_el = ToInt32((sender as Ellipse).Name.Substring(1));
-                if (index_el != pnts.Count - 1 && index_el != 0)
+                prevX = 0;
+                prevY = 0;
+
+                var draggableControl = (sender as Ellipse);
+
+                if (draggableControl.Fill == Brushes.Black)
                 {
-                    index_el_left = index_el - 1;
-                    index_el_right = index_el + 1;
+                    draggableControl.Fill = Brushes.Red;
+                    draggableControl.Stroke = Brushes.Red;
+
+                    isDragging = true;
+                    var canvas = MainCanvas;
+                    mousePosition = e.GetPosition(canvas);
+                    draggableControl.CaptureMouse();
+
+                    index_el = ToInt32((sender as Ellipse).Name.Substring(1));
+                    if (index_el != pnts.Count - 1 && index_el != 0)
+                    {
+                        index_el_left = index_el - 1;
+                        index_el_right = index_el + 1;
+                    }
+                    else
+                    {
+                        if (index_el == pnts.Count - 1)
+                        {
+                            index_el_left = index_el - 1;
+                            index_el_right = 0;
+                        }
+                        if (index_el == 0)
+                        {
+                            index_el_left = pnts.Count - 1;
+                            index_el_right = index_el + 1;
+                        }
+                    }
+
+                    //var pg = Background.Children.OfType<Polygon>().ToList();
+                    //Polygon pg_ch = pg[0];
+                    //Polygon pg_ch = main_polygon;
+
+                    tocki = new List<Point>();
+                    tocki.Add(main_polygon.Points[index_el_left]);
+                    tocki.Add(main_polygon.Points[index_el_right]);
+
+
                 }
                 else
                 {
-                    if (index_el == pnts.Count - 1)
-                    {
-                        index_el_left = index_el - 1;
-                        index_el_right = 0;
-                    }
-                    if (index_el == 0)
-                    {
-                        index_el_left = pnts.Count - 1;
-                        index_el_right = index_el + 1;
-                    }
+                    draggableControl.Fill = Brushes.Black;
+                    draggableControl.Stroke = Brushes.Black;
+                    isDragging = false;
                 }
-
-                //var pg = Background.Children.OfType<Polygon>().ToList();
-                //Polygon pg_ch = pg[0];
-                Polygon pg_ch = main_polygon;
-
-                tocki = new List<Point>();          
-                tocki.Add(pg_ch.Points[index_el_left]);
-                tocki.Add(pg_ch.Points[index_el_right]);
-
             }
-            else
+            catch 
             {
-                draggableControl.Fill = Brushes.Black;
-                draggableControl.Stroke = Brushes.Black;
-                isDragging = false;
+                TextBlock tb= new TextBlock();
+                tb.Text = "Кликните клавишу Esc для нормализации редактора";
+                tb.Foreground = Brushes.Red;
+                MainCanvas.Children.Add(tb);
             }
+          
         }
 
         private void Elipce_MouseMove(object sender, MouseEventArgs e)
         {
-            var draggableControl = (sender as Ellipse);
-
-
-            if (isDragging == true)
+            try
             {
-                var canvas = MainCanvas;
-                var currentPosition = e.GetPosition(canvas);
-                var transform = (draggableControl.RenderTransform as TranslateTransform);
-                if (transform == null)
+                var draggableControl = (sender as Ellipse);
+
+
+                if (isDragging == true)
                 {
-                    transform = new TranslateTransform();
-                    draggableControl.RenderTransform = transform;
+
+                    var canvas = MainCanvas;
+                    var currentPosition = e.GetPosition(canvas);
+                    var transform = (draggableControl.RenderTransform as TranslateTransform);
+                    if (transform == null)
+                    {
+                        transform = new TranslateTransform();
+                        draggableControl.RenderTransform = transform;
+                    }
+
+                    //if (Math.Abs(transform.X) <3 && Math.Abs(transform.Y)<3) return;
+                    transform.X = (currentPosition.X - mousePosition.X);
+                    transform.Y = (currentPosition.Y - mousePosition.Y);
+
+                    //segment_left.Points.Add(new Point(currentPosition.X, currentPosition.Y));
+                    //segment_right.Points.Add(new Point(currentPosition.X, currentPosition.Y));
+                    var fld = MainCanvas.Children.OfType<Line>().ToList();
+                    foreach (Line kn in fld) MainCanvas.Children.Remove(kn);
+                    line1 = Make_line(tocki[0].X, tocki[0].Y, currentPosition.X, currentPosition.Y);
+                    line2 = Make_line(tocki[1].X, tocki[1].Y, currentPosition.X, currentPosition.Y);
+
+                    MainCanvas.Children.Add(line1);
+                    MainCanvas.Children.Add(line2);
+
+
+                    if (prevX > 0)
+                    {
+                        transform.X += prevX;
+                        transform.Y += prevY;
+                    }
                 }
+            }
+            catch
+            {
 
-               
-                transform.X = (currentPosition.X - mousePosition.X);
-                transform.Y = (currentPosition.Y - mousePosition.Y);
-
-                //segment_left.Points.Add(new Point(currentPosition.X, currentPosition.Y));
-                //segment_right.Points.Add(new Point(currentPosition.X, currentPosition.Y));
-                var fld = MainCanvas.Children.OfType<Line>().ToList();
-                foreach (Line kn in fld) MainCanvas.Children.Remove(kn);
-                line1= Make_line(tocki[0].X, tocki[0].Y, currentPosition.X, currentPosition.Y);
-                line2 = Make_line(tocki[1].X, tocki[1].Y, currentPosition.X, currentPosition.Y);
-                
-                MainCanvas.Children.Add(line1);
-                MainCanvas.Children.Add(line2);
-
-
-                if (prevX > 0)
-                {
-                    transform.X += prevX;
-                    transform.Y += prevY;
-                }
             }
         }
 
@@ -852,44 +929,59 @@ namespace GoToKnit_
 
         private void Ellipce_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            isDragging = false;
-            var draggable = (sender as Ellipse);
-            var transform = (draggable.RenderTransform as TranslateTransform);
-            if (transform != null)
+            
+            try
             {
-                prevX = transform.X;
-                prevY = transform.Y;
-            }
-            draggable.ReleaseMouseCapture();
-            draggable.Stroke = Brushes.Black;
-            draggable.Fill = Brushes.Black;
-            prevX = 0;
-            prevY = 0;
-            var el = Background.Children.OfType<Ellipse>().ToList();
-            foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);
-
-            List<Polygon> pg = Background.Children.OfType<Polygon>().ToList();
-            foreach(Polygon pg_ch in pg)
-            {
-                for(int i=0; i<pg_ch.Points.Count; i++)
+                isDragging = false;
+                var draggable = (sender as Ellipse);
+                var transform = (draggable.RenderTransform as TranslateTransform);
+                if (Math.Abs(transform.X) < 3 && Math.Abs(transform.Y) < 3) return;
+                if (transform != null)
                 {
-                    if (i == index_el) 
-                    {                
+                    prevX = transform.X;
+                    prevY = transform.Y;
+                }
+                draggable.ReleaseMouseCapture();
+                draggable.Stroke = Brushes.Black;
+                draggable.Fill = Brushes.Black;
+                prevX = 0;
+                prevY = 0;
+                var el = Background.Children.OfType<Ellipse>().ToList();
+                foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);
+
+                //List<Polygon> pg = Background.Children.OfType<Polygon>().ToList();
+                //foreach(Polygon pg_ch in pg)
+                //{
+                for (int i = 0; i < main_polygon.Points.Count; i++)
+                {
+                    if (i == index_el)
+                    {
                         main_polygon.Points[index_el] = new Point(line1.X2, line1.Y2);
-                    }                   
+                    }
                 }
                 //main_polygon = pg_ch;               
+                //}
+
+
+                var fld = MainCanvas.Children.OfType<Line>().ToList();
+                foreach (Line kn in fld) MainCanvas.Children.Remove(kn);
+                //pg[0] = main_polygon;
+                //foreach (Polygon fld_d in pg) Background.Children.Remove(fld_d);
+                //Background.Children.Add(main_polygon);
+
+                for (int i = 0; i < main_polygon.Points.Count; i++) Make_ellipse(main_polygon.Points[i].X, main_polygon.Points[i].Y);
+                Ellip_events();
             }
-            
+            catch
+            {
+                prevX = 0;
+                prevY = 0;
+                TextBlock tb = new TextBlock();
+                tb.Text = "Кликните клавишу Esc для нормализации редактора";
+                tb.Foreground = Brushes.Red;
+                MainCanvas.Children.Add(tb);
 
-            var fld = MainCanvas.Children.OfType<Line>().ToList();
-            foreach (Line kn in fld) MainCanvas.Children.Remove(kn);
-            pg[0] = main_polygon;
-            foreach (Polygon fld_d in pg) Background.Children.Remove(fld_d);
-            Background.Children.Add(main_polygon);
-
-            for(int i=0; i< main_polygon.Points.Count; i++) Make_ellipse(main_polygon.Points[i].X, main_polygon.Points[i].Y);
-            Ellip_events();
+            }
         }
 
         private void Control_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -906,16 +998,22 @@ namespace GoToKnit_
             //ContextMenu cm = this.FindResource("cmButton") as ContextMenu;
             //cm.PlacementTarget = sender as Window;
             //cm.IsOpen = true;
-
-            var pg = Background.Children.OfType<Polygon>().ToList();
-            
-            string str = "";
-            for(int i=0; i< pg[0].Points.Count; i++)
+            try
             {
-                str = str + pg[0].Points[i].X + ":" + pg[0].Points[i].Y+"mx"+main_polygon.Points[i].X + "my" + main_polygon.Points[i].Y + "\n";
-            }
+                var pg = Background.Children.OfType<Polygon>().ToList();
 
-            MessageBox.Show(str);
+                string str = "";
+                for (int i = 0; i < pg[0].Points.Count; i++)
+                {
+                    str = str + pg[0].Points[i].X + ":" + pg[0].Points[i].Y + "mx" + main_polygon.Points[i].X + "my" + main_polygon.Points[i].Y + "\n";
+                }
+
+                MessageBox.Show(str);
+            }
+            catch
+            {
+                MessageBox.Show("Нет полигона");
+            }
 
         }
 
@@ -923,8 +1021,9 @@ namespace GoToKnit_
         {
             
             isDragging = false;
-            var draggable = (sender as Polygon);
+            var draggable = (sender as Polygon);            
             var transform = (draggable.RenderTransform as TranslateTransform);
+            //MessageBox.Show("" + transform.X);
             if (transform != null)
             {
                 prevX = transform.X;
@@ -935,6 +1034,92 @@ namespace GoToKnit_
             Change_poligon();
             Trans_polygon(sender);         
            
+        }
+
+        private void Btn_show_det_Click(object sender, RoutedEventArgs e)
+        {
+            string det = LB_names.SelectedItem.ToString();
+            List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
+            string str = det+"\n";
+            
+            for(int i=0; i<prov.Count; i++)
+            {
+                str = str + "X:" + prov[i].X + "; Y:" + prov[i].Y+"\n";
+            }
+
+            MessageBox.Show(str);
+        }
+
+        private void Btn_grid_Click(object sender, RoutedEventArgs e)
+        {
+            if (bg_clear == true)
+            {
+                var bg = Background.Children.OfType<Line>().ToList();
+                foreach (Line ln in bg) Background.Children.Remove(ln);
+
+                bg_clear = false;
+            }
+            else
+            {
+                UpdateBackPattern(null, null);
+                bg_clear = true;
+            }
+        }
+
+        private void Btn_grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_grid, "Resources/border1.png", true);
+        }
+
+        private void Btn_grid_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_grid, "Resources/border.png", false);
+        }
+
+        private void Btn_del_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cnange_img( Img_del, "Resources/delete1.png", true);
+        }
+
+        private void Btn_del_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cnange_img( Img_del, "Resources/delete.png", false);
+
+        }
+
+        private void Cnange_img(Image img, string rsc, bool curs)
+        {
+           
+            Uri fileUri = new Uri(rsc, UriKind.Relative);
+            img.Source = new BitmapImage(fileUri);
+            if (curs == true)
+            {
+                this.Cursor = Cursors.Hand;
+            }
+            else
+            {
+                this.Cursor = Cursors.Arrow;
+            }
+        }
+
+        private void Btn_save_det_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_save, "Resources/save1.png", true);
+        }
+
+        private void Btn_save_det_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_save, "Resources/save.png", false);
+        }
+
+        private void Btn_sim_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_sim, "Resources/sim1.png", true);
+        }
+
+        private void Btn_sim_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_sim, "Resources/sim.png", false);
         }
 
         void Change_poligon()
@@ -952,8 +1137,10 @@ namespace GoToKnit_
 
             foreach (Polygon list in pg) Background.Children.Remove(list);
             Background.Children.Add(main_polygon);
-            Add_polygon_events();
+            Add_polygon_events();          
+
         }
+
         void Trans_polygon(object sender)
         {
             Polygon pg= (sender as Polygon);
@@ -962,9 +1149,11 @@ namespace GoToKnit_
             {
                Make_ellipse(pg.Points[i].X+ prevX, pg.Points[i].Y+ prevY);              
             }
-
             Ellip_events();
+            prevX = 0;
+            prevY = 0;
         }
+
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
             var draggableControl = (sender as Polygon);
@@ -977,6 +1166,7 @@ namespace GoToKnit_
                     transform = new TranslateTransform();
                     draggableControl.RenderTransform = transform;
                 }
+                //if (Math.Abs(transform.X) < 3 && Math.Abs(transform.Y) < 3) return;
                 transform.X = (currentPosition.X - mousePosition.X);
                 transform.Y = (currentPosition.Y - mousePosition.Y);
                 if (prevX > 0)

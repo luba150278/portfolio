@@ -11,25 +11,50 @@
         Title="Frm_editor" Width="1500" Height="800" KeyDown="Window_KeyDown" Loaded="Window_Loaded" MouseRightButtonDown="Window_MouseRightButtonDown"  >
     <Window.Resources>
         <ContextMenu x:Key="cmButton">
-            <MenuItem Header="Menu item 1" />
+            <MenuItem x:Name="MI_del" Header="Очистить холст" />
             <MenuItem Header="Menu item 2" />
             <Separator />
-            <MenuItem Header="Menu item 3" />
+            <MenuItem Header="Переместить точки">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                   
+                    <StackPanel Margin="5" Orientation="Vertical">
+                        <Label >X</Label>
+                        <TextBox x:Name="TB_X1" Width="40">0</TextBox>
+                    </StackPanel>
+
+                    <StackPanel Margin="5" Orientation="Vertical">
+                        <Label>Y</Label>
+                        <TextBox x:Name="TB_Y1" Width="40">0</TextBox>
+                    </StackPanel>
+
+                    <Button MaxHeight="20" x:Name="Btn_point1" Margin="5"  ToolTip="Добавить точку/конец отрезка или переместить выделенные точки" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        Ok
+                    </Button>
+
+                </StackPanel>
+            </MenuItem> 
         </ContextMenu>
     </Window.Resources>
     
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.05*"/>
-                <ColumnDefinition Width="0.95*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.9*"/>
                 
             </Grid.ColumnDefinitions>
-        
-            <StackPanel Grid.Column="0">
-                <!--<Button x:Name="Btn_dec" Click="Btn_dec_Click" Margin="10">Увеличить</Button>-->
-                <!--<Button x:Name="Btn_inc" Click="Btn_inc_Click" Margin="10">Уменьшить</Button>-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+
+            <Border x:Name="BD_models" CornerRadius="20" Margin="8" Background="#FFFBF6EF" Grid.Column="0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#FFA49F9F"/>
+                    </Border.Effect>          
+          
+            <StackPanel >
+                    <StackPanel.Effect>
+                        <DropShadowEffect Color="#FFA49F9F"/>
+                    </StackPanel.Effect>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button x:Name="Btn_grid"  MaxWidth="40" Margin="5" ToolTip="Показать/скрыть сетку" Click="Btn_grid_Click" MouseEnter="Btn_grid_MouseEnter" MouseLeave="Btn_grid_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                         <Image  x:Name="Img_grid" Source="Resources/border.png" Margin="2" Height="30" />
                     </Button>
@@ -44,31 +69,56 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button MaxHeight="40" x:Name="Btn_point" Margin="5" Click="Btn_point_Click" ToolTip="Добавить точку/конец отрезка" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                    <Button MaxHeight="40" x:Name="Btn_point" Margin="5" Click="Btn_point_Click" ToolTip="Добавить точку/конец отрезка или переместить выделенные точки" BorderBrush="#FF898686" Background="#FFF5F0F0" MouseEnter="Btn_point_MouseEnter" MouseLeave="Btn_point_MouseLeave" >
                         <Image  x:Name="Img_point" Source="Resources/points.png" Margin="2" Height="30" />
                     </Button>
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label >X</Label>
-                        <TextBox x:Name="TB_X" MinWidth="40">0</TextBox>
+                        <TextBox x:Name="TB_X" Width="40">0</TextBox>
                     </StackPanel>
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label>Y</Label>
-                        <TextBox x:Name="TB_Y" MinWidth="40">0</TextBox>
+                        <TextBox x:Name="TB_Y" Width="40">0</TextBox>
                     </StackPanel>
                 </StackPanel>
 
-                <Button x:Name="Btn_sim" MaxWidth="40" Margin="5" ToolTip="Симметрия детали. Только для разомкнутого контура!" Click="Btn_sim_Click" MouseEnter="Btn_sim_MouseEnter" MouseLeave="Btn_sim_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                    <Image  x:Name="Img_sim" Source="Resources/sim.png" Margin="2" Height="30" />
-                </Button>
+                    <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                        <Button x:Name="Btn_sim" MaxWidth="40" Margin="5" ToolTip="Симметрия детали. Только для разомкнутого контура!" Click="Btn_sim_Click" MouseEnter="Btn_sim_MouseEnter" MouseLeave="Btn_sim_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_sim" Source="Resources/sim.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_close" MaxWidth="40" Margin="5" ToolTip="Закрыть контур" Click="Btn_close_Click" MouseEnter="Btn_close_MouseEnter" MouseLeave="Btn_close_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_close" Source="Resources/point_close.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_some" MaxWidth="40" Margin="5" ToolTip="Выделить несколько точек" Click="Btn_some_Click" MouseEnter="Btn_some_MouseEnter" MouseLeave="Btn_some_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_some" Source="Resources/select.png" Margin="2" Height="30" />
+                        </Button>
+                    </StackPanel>
+                
+
+                    <StackPanel Orientation="Horizontal"  Margin="5" HorizontalAlignment="Center">
+                        <Button x:Name="Btn_left" MaxWidth="40" MaxHeight="40" Margin="5" ToolTip="Сдвинуть выделенные точки влево" Click="Btn_left_Click" MouseEnter="Btn_left_MouseEnter" MouseLeave="Btn_left_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_left" Source="Resources/move_left.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_rignt" MaxWidth="40" MaxHeight="40" Margin="0 5" ToolTip="Сдвинуть выделенные точки вправо" Click="Btn_rignt_Click" MouseEnter="Btn_rignt_MouseEnter" MouseLeave="Btn_rignt_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_right" Source="Resources/move_right.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_up" MaxWidth="40" MaxHeight="40" Margin="5" ToolTip="Сдвинуть выделенные точки вверх" Click="Btn_up_Click" MouseEnter="Btn_up_MouseEnter" MouseLeave="Btn_up_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_up" Source="Resources/move_up.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_down" MaxWidth="40" MaxHeight="40" Margin="5" ToolTip="Сдвинуть выделенные точки вниз" Click="Btn_down_Click" MouseEnter="Btn_down_MouseEnter" MouseLeave="Btn_down_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_down" Source="Resources/move_down.png" Margin="2" Height="30" />
+                        </Button>
+                    </StackPanel>
 
 
-
-
-
-
-                <StackPanel>
+                    <StackPanel>
                     <Label>Деталь</Label>
                     <TextBox x:Name="TB_Name" KeyDown="TB_Name_KeyDown" ></TextBox>
                     <Label>Детали:</Label>
@@ -80,10 +130,10 @@
                 </StackPanel>
                 
             </StackPanel>
-            
 
+            </Border>
 
-            <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 20 40" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp">
+            <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 100 40" MouseDown="MainCanvas_MouseDown" MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp">
                
                     <Canvas   x:Name="Background"
                             Width="{Binding ActualWidth, ElementName=MainCanvas}"

@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300;400;700&display=swap');
+@import url(http://allfont.ru/allfont.css?fonts=president-cyr);
+
+body{
+    
+  background: url('../img/background_pr.jpg')  no-repeat center top; /* Добавляем фон */
+   background-size:cover;
+  background-attachment: fixed;
+  
+}
+section{margin-bottom: 2%;}
+#main_logo{margin-top: 2%;}
+.temp_back{ /*фон для всех страниц кроме главной*/
+  background: url('../img/back3_pr.jpg')  no-repeat center top; /* Добавляем фон */
+  background-size:cover;
+ background-attachment: fixed;
+}
+
+p, #ul_miss>li,.nav_foot>li>a{padding: 0; margin: 0; 
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+}
+p{font-size: 1.5rem;}
+#logo{margin:0%; margin-top: 2%;}
+header{
+	padding: 0;
+	margin: 0%;
+	background: rgb(196, 247, 231, 0.7);
+	font-size: 2rem;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  font-weight: 700;
+}
+
+.carousel {margin:0; 
+  height: 450px !important;
+}
+.carousel-inner img {
+  height: 400px !important;
+  /*width: 600px !important;*/
+  margin: 5%; margin-left:0 ;
+}
+.navbar{margin: 0% 15%; }
+.nav-item{margin: 0 5%;}
+.navbar-light .navbar-nav .active>.nav-link{color:#850505;}
+.navbar-light .navbar-nav .nav-link:hover{color:#850505;}
+.navbar-light .navbar-nav .nav-link,.fab, .nav_foot>li>a{color:#5a8b5a;}
+
+
+.card{background: rgb(196, 247, 231, 0.7);}
+.btn-primary{background-color:#5a8b5a; border: none;}
+.container{ 
+   background:rgb(255, 255, 255, 0.8);  
+}
+
+h1, h2, h3{
+  font-family: 'President Cyr', arial;
+  font-size:2.5rem;
+  font-weight: bold;
+  color:#850505;
+  margin-left: 5%;
+  margin-top:2%;
+  text-align: center;
+  
+}
+h2,h3{
+  font-size:2rem;
+  text-align: left;
+  color:#024807;
+  padding-top: 2%; 
+}
+h3{font-size: 1.8rem;}
+
+#img_big_logo{height: 200px;}
+
+h1, #img_big_logo{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;}
+
+.container,footer{
+opacity:0; /*Элемент полностью прозрачный (невидимый)*/
+transition: 2s; /*Скорость перехода состояния элемента*/
+animation: show 3s 1; /* Указываем название анимации, её время и количество повторов*/
+animation-fill-mode: forwards; /* Чтобы элемент оставался в конечном состоянии анимации */
+animation-delay: 0s; /* Задержка перед началом */
+}
+
+ .fab{padding: 3% ;font-size: 5rem;}
+ #social_fab{text-align: center;}
+ hr{
+  color:#024807;  
+  background-color: #024807; /* Цвет линии */
+  height: 2px;
+  width: 80%;
+  margin: 0;
+  margin-bottom: 2%;
+ }
+ #ul_miss>li{padding-bottom: 2%;}
+
+.social>ul>li, .nav_foot>li, #ul_miss>li{list-style-type: none; }
+.card{height: 200px;vertical-align: middle; margin-bottom: 5%; }
+footer{margin-bottom: 7%;}
+
+/* флаги*/
+.img_fl{ margin: 3%; width: 100%; }
+.dv_flag{ 
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+.dv_flag p{margin: 0;}
+@keyframes show{
+  0%{
+  opacity:0;
+  }
+  100% {
+  opacity:1;
+  }
+  }
+
+  
+
+@media screen and (max-width: 812px){
+  h1,h2{font-size: 2rem;}
+}
+
+@media screen and (max-width: 568px){
+  h1,h2{font-size: 1.5rem;}
+}
+
+@media only screen and (max-width : 768px) and (orientation: landscape)
+{
+  #img_big_logo{
+    height: 150px;
+    margin-top: 1%;
+  }
+  
+}
+
+@media only screen and (min-width : 1601px) and (orientation: landscape)
+{
+  #ul_miss>li{
+    font-size: 2.5rem;
+  }
+  
+}
+
+@media only screen and (max-width : 320px) {
+  .card{height: 220px;}
+}
+
+@media only screen and (min-width : 1024px) and (max-width:1366px) {
+  form{margin-left: 5%;}
+  .nav-item{margin: 0;}
+  input{margin-bottom: 5%;}
+}

@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap')
+$clm: rgb(22, 83, 14)
+$clv: #b86303
+@mixin bg
+  background-size:cover
+  background-attachment: fixed   
+
+html, body
+  height: 100%
+  width: 100%
+  margin: 0
+  display: table
+  font-family: 'Philosopher', sans-serif
+  
+#bg_next
+  background: url('../img/bg_next.jpg')  no-repeat center top
+  @include bg
+
+#bg_exp
+  background: url('../img/bg_slide.jpg')  no-repeat center top
+  @include bg
+
+#bg_exc
+  background: url('../img/bg_ex.jpg')  no-repeat center top
+  @include bg
+
+#bg_cont
+  background: url('../img/bg_cont.jpg')  no-repeat center top
+  @include bg
+
+#nav_sec, .card
+  background: rgba(252, 249, 249, 0.7)
+ 
+
+.container, .exp_ex
+  background: rgba(252, 249, 249, 0.7)
+  margin: 0 auto
+.exp
+  background: none
+.exp_opis
+  @extend .container  
+section
+  margin-bottom: 1%
+
+.logo
+  max-width: 5rem
+  height: auto
+
+.logo_div
+  display: inline-flex
+
+nav
+  font:
+    size: 1.2rem
+    weight: bold
+  margin-left: 10%
+  
+h1
+  font:
+    size: 1.5rem
+    weight: bold
+  margin-left: 2%
+  color: $clm
+  
+#navbarNav
+  margin-top: 0
+  text-align: center
+  
+ul
+  margin-left: 5%
+
+.nav-item
+  border: 0
+    right: 1px   
+    style: solid
+    color: $clm
+  padding-left: 2%
+  margin: 0    
+    right: 2%
+
+.navbar-light .navbar-nav .active>.nav-link
+  color: $clv
+.navbar-light .navbar-nav .nav-link:hover
+  color: $clv
+.navbar-light .navbar-nav .nav-link,.fab, .nav_foot>li>a
+  color: $clm
+
+
+.ab_m, footer>.container, .card
+  width: 100%
+  height: 100%
+  border:
+    style: solid
+    image-width: 15px
+    image-source: url('../img/border.png')
+    image-slice: 30
+    image-repeat: round
+
+.ab_m_in, 
+  padding: 2%
+
+h2
+  color: $clm
+  font-weight: bold
+
+hr
+  color: $clm
+  background-color: $clm
+  height: 2px
+  width: 80%
+  margin: 0
+    bottom: 2%
+p, li
+  color: #515251
+
+footer
+  margin-bottom: 10%
+
+.social
+  padding: 2%
+
+#social_fab
+  margin: 0
+  padding: 0
+  text-align: left
+
+.fab
+  padding: 3%
+ 
+  font-size: 4rem
+  color: $clv
+
+#hist
+  color: #041702
+
+.carousel
+  margin: 0 auto 
+  height: 80vh !important
+  width: 100% !important
+.exp_opis
+  margin: auto
+.carousel-item img  
+  display: block
+  height: 80vh !important
+  width: 100% !important
+
+.exp_opis_in
+  margin: 2%
+.exp_opis > p
+  padding-top: 2%
+
+.exp_row
+  height: 200px
+
+.aos-init
+  margin-bottom: 2%
+
+.card
+  height: 100%
+  vertical-align: middle
+  margin-bottom: 5%
+.card-text
+  margin: 0
+.card-text, .card-text > li
+  font-size: 1.5rem
+.err
+  color: $clv
+@media screen and (max-width: 411px)    
+  nav
+    margin-left: 0
+  h1
+    font-size: 1rem
+    padding-top: 10%

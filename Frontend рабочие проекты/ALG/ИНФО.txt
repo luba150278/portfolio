@@ -1,0 +1,75 @@
+WP на локальном сервере
+user: arif
+parol:3N7U$NRShJlOX5q%el
+название:Азербайджанский культурно-общественный центр
+email:luba150278@gmail.com
+на локальном сервере:
+БД phpmyadmin
+user: root
+parol: не вводим
+
+azeri.lg.ua
+================================
+Хостинг: ukraine.com.ua
+Вход на хостинг:
+Почта: arif.bagirov777@gmail.com
+пароль: MagomaevRulit2020
+=====================================
+Сервер FTTP
+host:he390178.ftp.tools
+login:he390178_ftp
+password:kPn3qu9a
+=================================
+База данных: he390178_azeri
+пароль: 7H2mgv!P1& 
+==================================
+WP:
+login: Azeri_Arif
+password: xhzRLg4M^RG^7Op&!s
+email: arif.bagirov777@gmail.com
+Site name: azeri.lg.ua
+===================================
+Почтовые ящики azeri.lg.ua:
+1.
+почта: fundrising@azeri.lg.ua
+пароль:s2E4C9alIU8p
+07Az06Ri
+
+2.
+почта: press@azeri.lg.ua
+пароль:54hS1bv2JGuF
+
+3.
+почта: business@azeri.lg.ua
+пароль:IcaTB5k457Ej
+
+4.
+почта: head@azeri.lg.ua
+пароль:2i5XMIB5tnl6
+
+5.
+почта: network@azeri.lg.ua
+пароль:OmrAs6AV90a4
+
+=====================================================
+ИНСТРУКЦИЯ для почтовых ящиков azeri.lg.ua
+1. Вводим в браузер: https://webmail.adm.tools/
+2. Там появится окно ввода логина/пароля
+3. Вводим/входим - там стандртный интерфейс почтового сервиса
+4. Настраиваете если нужно интерфейс - меняете цвет, добавляете папки и.т.д
+5. Редирект настроен на адрес arif.bagirov777@gmail.com, больше ящиков для редиректа настроить нальзя.
+Но если нужно кому-то другому перенаправлять письма, то это нужно делать в почтовом аккаунте этого человека (в gmail - это раздел "Сбор почты")  
+
+==========Google analytics=======
+почта:lugmuseum.stb@gmail.com
+пароль:6ulginka1707
+скрипт уже подключен:
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-168424352-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-168424352-1');
+</script>

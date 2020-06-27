@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+   <form>
+     <p>Имя:<input class="nm" type="text" width="80px"></p>
+     <p>Фамилия:<input class="fio" type="text" width="80px"></p>
+     <p>Возраст:<input class="y_old" type="text" width="40px"></p>
+     <p><input class="sbm" type="submit" value="Отправить"></p>
+   </form>
+
+  <p class="response"></p>
+
+
+  <script>
+    function test (x1, x2) {
+      console.log(parseInt(x1)+parseInt(x2));
+    }
+
+     jQuery('form').submit(function(){
+
+       var name=jQuery('.nm').val();
+       var l_name=jQuery('.fio').val();
+       var y_old=jQuery('.y_old').val();
+      /*var txt="name: "+ name+"/n";
+      txt=txt+"last_name: "+l_name+"/n";
+      txt=txt+"old: "+y_old;
+      jQuery('.response').append(txt);*/
+        jQuery('.response').append("<p>name: "+ name +"</p>");
+        jQuery('.response').append("<p>last_name: "+l_name+"</p>");
+        jQuery('.response').append("<p>old: "+y_old+"</p>");
+       return false;
+      });
+
+  </script>
+
+ 
+
+  </body>
+</html>

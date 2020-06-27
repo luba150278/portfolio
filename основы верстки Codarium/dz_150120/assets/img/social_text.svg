@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="141" height="56" viewBox="0 0 141 56">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 11px;
+        fill: #545962;
+        text-anchor: middle;
+        font-family: Ubuntu;
+      }
+
+      .cls-2 {
+        fill: #659cce;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <text id="Lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit._Mauris_nec_ipsum_at_lacus_commodo_susci" data-name="Lorem ipsum dolor sit amet,  consectetur adipiscing elit.  Mauris nec ipsum at lacus  commodo susci" class="cls-1" x="-7.862" y="0.183"><tspan x="-7.862">Lorem ipsum dolor sit amet, </tspan><tspan x="-7.862" dy="13.2">consectetur adipiscing elit. </tspan><tspan x="-7.862" dy="13.2">Mauris nec ipsum at lacus </tspan><tspan x="-7.862" dy="13.2">commodo suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec ipsum at lacus commodo suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec ipsum at lacus commodo suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec ipsum at lacus commodo suscipit. <tspan class="cls-2">Details...</tspan></tspan></text>
+</svg>

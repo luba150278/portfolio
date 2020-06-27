@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa&display=swap&subset=cyrillic');
+
+body{
+	/*background: url('../img/background.jpg') no-repeat top center;
+	background-size: 100vw 100vh;*/
+	margin: 0;
+	
+}
+
+@keyframes move {
+from{background: url('../img/left_balls.png');} 
+to {background: url('../img/right_balls.png');}
+25% {opacity: 0%;}
+75% {opacity: 0%;}
+}
+
+.main{display: flex;
+margin:0;
+padding: 0;}
+
+.left_block, .right_block {
+	display: block;
+	width:10vw;
+	height: 100vh;
+	background: url('../img/left_balls.png');
+	/*background-size: 20%;*/
+}
+.left_block{ animation: move 5s steps(4,end) infinite normal;}
+.right_block {animation: move 5s steps(4,end) 2.5s infinite reverse;}
+.center_block{
+	display:flex;	
+	width:80vw;
+	padding-top:10%;
+	padding-left: 0;
+	padding-right: 0;
+	margin:0;
+}
+.center_block a{margin: 0;padding: 0;}
+.center_block a{width:33.33%; margin: 0px; padding: 0; background: url('../img/sketch2.png');
+	background-size: 100%; background-repeat: no-repeat;}
+h2{position: absolute; top:28vh; font-size: 40px; white-space: wrap; width:300px; font-family: 'Comfortaa', cursive; font-weight: bold; color:#2c7998;}
+#l_w{left: 16vw;}
+#c_w{left: 42vw;}
+#r_w{left: 68.5vw;}
+.center_block a:hover{background: url('../img/sketch2_hover.png');background-size: 100%; background-repeat: no-repeat; }
+.center_block a p:hover{color:#2f1056;}

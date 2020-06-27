@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="187" height="72" viewBox="0 0 187 72">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 11px;
+        fill: #515862;
+        font-family: Ubuntu;
+      }
+    </style>
+  </defs>
+  <text id="Lorem_ipsum_dolor_sit_amet_consect_etur_adipiscing_elit._Ut_ultricies_sagit_tism_agnaa_commodo._U" data-name="Lorem ipsum dolor sit amet, consect  etur adipiscing elit. Ut ultricies sagit tism agnaa commodo. U" class="cls-1" transform="translate(0.356 -6.531)">Lorem ipsum dolor sit amet, consect <tspan x="0" dy="13.2">etur adipiscing elit. Ut ultricies sagit</tspan><tspan x="0" dy="13.2">tism agnaa commodo. Ut eget eros mauris, ut cursus urna vestibuluman ipsum primis in faucibus orci luctuset.</tspan></text>
+</svg>

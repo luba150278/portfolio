@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+body{
+	/*background: url('../img/background.png') no-repeat top center;
+	background-size: 100% 600%;
+/* Фоновое изображение выровнено по центру в горизонтальной и вертикальной плоскостях  background-position: center center;      
+/* Фон не повторяется   background-repeat: no-repeat;      
+/* Фон зафиксирован в области просмотра и потому не двигается, когда высота контента превышает высоту изображения    background-attachment: fixed;      
+/* Это свойство заставляет фон менять масштаб при изменении размеров содержащего его контейнера  background-size: cover;      
+/* Цвет фона, который будет отображаться при загрузке фоновой картинки  background-color: #464646;*/
+	margin: 0;
+}
+
+a{text-decoration: none;}
+.header{
+	display:flex;
+	position: absolute;
+	visibility: visible;	
+	padding: 5px;
+	height: 100px;
+	box-sizing: border-box;
+	width:100%;
+}
+h1{
+	font-size: 40px;
+}
+p{
+	font-size: 20px;
+	width:39%;
+}
+#home{
+	
+	width: 40%;
+	margin-left: 5%;
+    margin-top: 2%;
+}
+.menubar{width:60%;  margin-top: 1%;}
+.menubar ul{list-style: none;}
+.menubar > ul { display: flex;}
+.menubar > ul li a{		
+	margin:2% 100px 5px 5px;
+	display: block;	
+}
+
+.menubar a:hover{color:Red;}
+
+#home, .menubar a{
+	font-weight: normal;
+	font-size: 24px;
+	font-family: 'Lato', sans-serif;
+	color:#4a5d8b;
+}
+
+.promo{
+	position: absolute;
+	top:40%;
+	left:5%;
+	font-family: 'Lato', sans-serif;
+	color:#4a5d8b;
+}
+
+.btn{
+	border-radius: 30px;
+	color:#4a5d8b;
+	background-color: white;
+	width: 10%;
+	height: 5%;
+	font-weight: bold;
+	font-size: 16px;
+	padding-left: 2%;
+	padding-bottom: 1%;
+	padding-top: 1%;
+}
+
+.social{
+	position: absolute;
+	top: 90%;
+	right:5%;	
+	/*background:#fee3ee;
+	border-radius: 15px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #4a5d8b;	*/
+	height: 35px;	
+}
+
+.fab{color:#4a5d8b;} 
+
+.slide {
+	background: url('../img/background.png');
+    height: 100vh;
+    background-size: 100%;
+    background-repeat: no-repeat; 
+}
+

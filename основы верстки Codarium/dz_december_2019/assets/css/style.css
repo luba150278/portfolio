@@ -1,0 +1,274 @@
+
+/*@import url('https://fonts.googleapis.com/css?family=Merriweather:900i&display=swap&subset=cyrillic,cyrillic-ext');*/
+@import url('https://fonts.googleapis.com/css?family=Comfortaa:300&display=swap&subset=cyrillic');
+*{
+	margin: 0;
+	padding: 0;	
+}
+
+h2{
+	font: bold 26px 'Comfortaa', arial, cursive;
+	color: #B22222;
+}
+
+ hr{
+    border: none; /* Убираем границу для браузера Firefox */
+    color: #B22222; /* Цвет линии для остальных браузеров */
+    background-color: #B22222; /* Цвет линии для браузера Firefox и Opera */
+    height: 2px; /* Толщина линии */
+    margin-bottom: 10px;
+   }
+strong {
+    font-weight: 900; 
+    text-decoration: solid; 
+    border-bottom: 1px dotted #6C3895;
+    color: #6C3895;
+}
+
+input[type="text"], input[type="password"], input[type="search"] 
+{
+	/*стили надписей в формах*/
+	color: darkseagreen;
+	width: 60%;
+	padding: 10px;
+}
+
+input,textarea
+{
+	outline: none;
+	border: none;
+	border: solid 1px #6C3895;
+	border-radius: 5px;
+	margin-top: 5px;
+}
+
+.header{
+	
+	background: url('../img/header.png') no-repeat top center;
+	 background-color: #FEE3E3; 
+	 height: 177px;
+	 width: 100%;
+	 font-size: 0.8em;
+	 margin-right: 0px;
+	 margin-left: 0px;
+	 min-width: 900px;	
+ 	/*background: url('../assets/img/header.jpg') no-repeat top center;*/
+}
+.main, .logo, .menubar, .site_content, .footer{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.logo{
+	width: 880px;
+	padding-bottom: 40px;
+
+}
+
+.logo h1, .logo h2{
+	font: bold 40px 'Comfortaa', arial, cursive;
+	margin: 0 0 0 9px;
+	text-shadow: 3px 5px 6px #916F6F;
+}
+/*font-family: 'Merriweather', serif;*/
+.logo_text h1, .logo_text h1 a, logo_text h1 a:hover{
+
+	padding: 0px 0 0 0;
+	color: #6C3895;
+	letter-spacing: 0.1em;
+	text-decoration: none;
+
+}
+
+.logo_text h2{
+	font-size: 200%;
+	font-style: bold;
+	padding: 4px 0 0 0;
+	color: #B22222;
+
+}
+
+.menubar{
+	width: 900px;
+	height: 46px;
+}
+
+ul.menu{
+	float: right;
+}
+
+ul.menu li{
+	float: left;
+	padding: 0 0 0 5px;
+	list-style: none;
+	margin: 0;
+
+}
+
+ul.menu li a{
+	font: bold 14px 'Comfortaa', cursive;
+	display:block;
+	height: 20px;
+	padding: 5px 35px 5px 28px;
+	color: #6C3895;
+	text-decoration: none;
+	background:#e3dbdb;
+	
+}
+
+ul.menu li a:hover {
+	color: #b0577f;
+	background:#FFAAAA;
+	}
+
+.site_content{
+	width:880px;
+	overflow: hidden; /*скрыть то, что не влезает */
+	margin: 20px auto 0 auto;
+	background-color: white;
+}
+
+.opis{
+	float:left;
+	width: 60%;
+	padding: 0%;
+	font: italic 14px 'Comfortaa', sans-serif;
+	color: #6C5D53;
+	display: flex;
+	flex-direction: column;
+
+}
+.opis p{
+	margin-top: 0.5em; /* Отступ сверху */
+    margin-bottom: 1em; /* Отступ снизу */
+}
+
+.pics{
+	float:left;
+}
+
+ul.pics_list li{
+	
+	display:block;	
+	padding: 10px;
+	display: inline;
+}
+
+ul.pics_list li img{
+	box-shadow: 5px 4px 3px 2px #483e37;
+	min-height: 50px;
+	min-width: 50px;
+	height: 100px;
+	width: 100px;
+	border-radius: 32px;
+}
+
+ul.pics_list li img:hover{
+
+	box-shadow: 5px 4px 3px 2px #6C3895;
+	height: 110px;
+	width: 110px;
+}
+
+.tbl_prob{
+	display:flex;
+	position: relative;	
+	left:10%;
+	font-size: 14px;
+border-radius: 10px;
+border-spacing: 0;
+text-align: center;
+margin: 10px;
+
+}
+th {
+background: #BCEBDD;
+color: #6C3895;
+text-shadow: 0 1px 1px #2D2020;
+padding: 10px 20px;
+}
+th, td {
+border-style: solid;
+border-width: 0 1px 1px 0;
+border-color: white;
+}
+th:first-child, td:first-child {
+text-align: left;
+}
+th:first-child {
+border-top-left-radius: 10px;
+}
+th:last-child {
+border-top-right-radius: 10px;
+border-right: none;
+}
+td {
+padding: 10px 20px;
+background: #FEE3E4;
+}
+tr:last-child td:first-child {
+border-radius: 0 0 0 10px;
+}
+tr:last-child td:last-child {
+border-radius: 0 0 10px 0;
+}
+tr td:last-child {
+border-right: none;
+}
+
+
+
+.sidebar,.reg_form{
+	float: right;
+	width: 222px;
+	padding: 10px;
+	margin: 0 0 16px 0;
+	border: solid 1px #B22222;
+	border-radius: 5px;
+	background-color: #dde5fb;
+	
+
+}
+.sidebar h2, input, .reg_form h2, input{
+	font: bold 12px 'Comfortaa', cursive;
+	
+
+}
+
+
+.btn, .btn_reg{
+	padding: 8px;
+	background-color: #fee3df;
+	cursor: pointer;/*курсор как палец*/
+
+	background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+	background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+
+
+}
+
+.btn:hover, .btn_reg:hover{
+	background-color: #FFAAAA;
+	color:#b0577f;
+	
+}
+
+.btn_reg{
+	position: relative;	
+	bottom: 20px;
+
+}
+
+ul.menu li a, .btn, .btn_reg{
+
+	box-shadow: 5px 4px 3px 2px #483e37;
+	border-radius: 10px;
+}
+
+.newblock{
+	display:flex;
+}
+

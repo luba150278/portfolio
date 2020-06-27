@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa&display=swap&subset=cyrillic');
+/*@font-face{
+
+	font-family: 'MyWebFont';
+	src: url('../assets/img/Mark Simonson - Proxima Nova Bold.otf');
+	font-weight: normal;
+
+font-style: normal;
+}*/
+*{margin: 0; padding: 0}
+.row{padding:0%;margin: 0%; }
+.btns,.devs,.sldrs,.block_img_val, .bot{display: flex;}
+
+
+.container {	
+	 
+    box-sizing: border-box;
+    padding-top: 4.8%; 
+    padding-left: 0.2%;
+	
+}
+
+
+.container>.row>div{box-sizing: border-box;}
+
+.block_img_val{	
+	padding-top: 25.5%;
+    padding-left: 5%;
+}
+.block_img_val>h2{padding-left: 1.7rem;padding-top: 3.2rem;}
+h2{
+    padding-top: 2.0rem;
+    /* padding-left: 0rem; */
+    color: #b9b9b9;
+    font-size: 2.8rem;
+    font-weight: bold;
+    /* font-family: "Proxima Nova"; */
+    font-family: 'Comfortaa', cursive;
+}
+   
+
+#p_header{
+	padding-top: 5.8rem;
+    padding-left: 2rem;   
+    color: #b9b9b9;
+    font-size: 1.5rem;
+    /* font-family: "Proxima Nova"; */
+    font-family: 'Comfortaa', cursive;
+    line-height: 1.7;
+    letter-spacing: 1px;
+}
+
+.btns{
+	padding-top: 2.5rem;
+    padding-left: 1.7rem;
+}
+
+.btn{
+	border-radius: 2rem;
+    height: 3.7rem;
+    width: 14.5rem;
+    margin-right: 1.6rem;
+    font-size: 1.4rem;
+   
+}
+
+.devs{
+	padding-top: 3.3rem;
+    padding-left: 2.5rem;
+}
+
+.fab{
+	color:#98d261;
+	font-size: 2.2rem;
+    margin-right: 2.5rem;
+}
+
+#and_d{width: 2.2rem;
+height: 2.2rem;
+margin-right: 2.5rem;}
+
+/*-----второй блок---*/
+.cleand{	
+	
+	padding-top: 5.3%;	
+	color:white;
+	font-family: 'Comfortaa', cursive;
+  background-color: rgb(152, 211, 97);
+	
+}
+.cleand>.container{/*height: 80%;*/ padding:0%; }
+
+
+.head_top>h2{
+	color:white; font-size:1.6rem; 	
+	padding-left: 16.7rem;
+    padding-top: 5.7rem;
+    letter-spacing: 1.7px;
+   
+}
+
+.head_top>p{	
+	
+    padding-left: 6.5rem;
+    padding-top: 1.0rem;
+    line-height: 1.6;
+    text-align: center;
+    letter-spacing: 0.5px;
+    width: 95%;
+}
+
+.main{display: flex;   
+    padding-top: 7.5%;    
+    box-sizing: border-box; }
+
+.icons_main{padding-left: 35%;}
+
+.main>div>h2{
+	
+	color:white; font-size:1.4rem;	
+   padding-top: 4.3rem;
+    padding-left: 6rem;
+    letter-spacing: 1px;
+   
+}
+
+.main>div>p{
+	color: white;
+   font-size: 1.0rem;
+    text-align: center;
+   padding-top: 1.7rem;
+    width: 85%;
+    padding-left: 2.6rem;
+    line-height: 1.5;
+   
+}
+/*----третий блок---------------------*/
+.features{padding-left:1%;padding-top: 5.7%}
+
+#feat{
+	color:#727272;
+	font-size:2rem;
+}
+
+.feat_r{
+	padding-left: 2.5rem;
+    padding-top: 1rem;
+    letter-spacing: 0px;
+}
+
+.bot_col{
+	padding-top: 4.5rem;
+	padding-left: 3.2rem;
+}
+
+h3{color:#a5d080;
+font-size: 1.2rem;
+    padding-left: 2.2rem;
+    letter-spacing: 1px;
+margin: 0;}
+
+
+.pic_bot,.text_bot, .bot_col>.row{margin: 0;padding: 0;}
+
+.bot_col>.row{padding-bottom: 2.0rem;}
+.pic_bot{padding-top: 0.4rem;padding-bottom: 2rem;}
+.text_bot>p{
+	color:#727272;
+	margin: 0;
+	padding: 0;
+	padding-left: 2.5rem;
+	letter-spacing: 0.5px;}
+
+
+/*----карусель----*/
+ .owl-buttons {
+  display: none;
+}
+.owl-carousel:hover .owl-buttons {
+  display: block;
+}
+
+.owl-item {
+  text-align: center;
+}
+
+.owl-theme .owl-controls .owl-buttons div {
+  background: transparent;
+  color: #869791;
+  font-size: 40px;
+  line-height: 300px;
+  margin: 0;
+  padding: 0 60px;
+  position: absolute;
+  top: 0;
+}
+.owl-theme .owl-controls .owl-buttons .owl-prev {
+  left: 0;
+  padding-left: 20px;
+}
+.owl-theme .owl-controls .owl-buttons .owl-next {
+  right: 0;
+  padding-right: 20px;
+}
+
+/*Четвертый блок*/
+.testimon{padding-top: 2.5%; }
+.kav{padding-left: 48.5%;}
+.quot{
+
+
+}
+q{
+	text-align: center;
+    font-size: 1.2rem;
+    color: #8e9492;
+    line-height: 2rem;
+    font-style: italic;
+    font-weight: 500;
+    /* letter-spacing: 1.0px; */
+    font-family: 'Comfortaa', cursive;
+    padding-left: 20.5%;
+    padding-right: 20.5%;
+    padding-top: 3.4%;}
+    /* width: 60%;}*/
+
+
+ .faces{padding-top: 10.5%;
+    padding-left: 5%;}
+
+ .faces_img{
+border:solid;
+ 	border-radius: 50%;
+ padding: 3%;
+border-width: 1px;
+border-color:#8e9492;}
+
+.col-9{padding-top: 5%;
+padding-left: 10%;}
+
+.col-9>h3{
+
+	padding: 0;
+	font-size: 1.3rem;
+	font-family: 'Comfortaa', cursive;
+}
+
+.col-9 p{
+	color: #8e9492;
+	font-size: 1.2rem;
+	font-weight: 400;
+}
+

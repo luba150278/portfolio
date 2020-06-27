@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap");
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: table;
+  font-family: "Philosopher", sans-serif;
+}
+
+#bg_next {
+  background: url("../img/bg_next.jpg") no-repeat center top;
+  background-attachment: fixed;
+}
+
+#bg_exp {
+  background: url("../img/bg_slide.jpg") no-repeat center top;
+  background-attachment: fixed;
+}
+
+#bg_exc {
+  background: url("../img/bg_ex.jpg") no-repeat center top;
+  background-attachment: fixed;
+}
+
+#bg_cont {
+  background: url("../img/bg_cont.jpg") no-repeat center top;
+  background-attachment: fixed;
+}
+
+#nav_sec, .card {
+  background: rgba(252, 249, 249, 0.7);
+}
+
+.container, .exp_opis, .exp_ex {
+  background: rgba(252, 249, 249, 0.7);
+  margin: 0 auto;
+}
+
+.exp {
+  background: none;
+}
+
+section {
+  margin-bottom: 1%;
+}
+
+.logo {
+  max-width: 5rem;
+  height: auto;
+}
+
+.logo_div {
+  display: inline-flex;
+}
+
+nav {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: 10%;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 2%;
+  color: #16530e;
+}
+
+#navbarNav {
+  margin-top: 0;
+  text-align: center;
+}
+
+ul {
+  margin-left: 5%;
+}
+
+.nav-item {
+  border: 0;
+  border-right: 1px;
+  border-style: solid;
+  border-color: #16530e;
+  padding-left: 2%;
+  margin: 0;
+  margin-right: 2%;
+}
+
+.navbar-light .navbar-nav .active > .nav-link {
+  color: #b86303;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #b86303;
+}
+
+.navbar-light .navbar-nav .nav-link, .fab, .nav_foot > li > a {
+  color: #16530e;
+}
+
+.ab_m, footer > .container, footer > .exp_opis, .card {
+  width: 100%;
+  height: 100%;
+  border-style: solid;
+  border-image-width: 15px;
+  border-image-source: url("../img/border.png");
+  border-image-slice: 30;
+  border-image-repeat: round;
+}
+
+.ab_m_in {
+  padding: 2%;
+}
+
+h2 {
+  color: #16530e;
+  font-weight: bold;
+}
+
+hr {
+  color: #16530e;
+  background-color: #16530e;
+  height: 2px;
+  width: 80%;
+  margin: 0;
+  margin-bottom: 2%;
+}
+
+p, li {
+  color: #515251;
+}
+
+footer {
+  margin-bottom: 10%;
+}
+
+.social {
+  padding: 2%;
+}
+
+#social_fab {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.fab {
+  padding: 3%;
+  font-size: 4rem;
+  color: #b86303;
+}
+
+#hist {
+  color: #041702;
+}
+
+.carousel {
+  margin: 0 auto;
+  height: 80vh !important;
+  width: 100% !important;
+}
+
+.exp_opis {
+  margin: auto;
+}
+
+.carousel-item img {
+  display: block;
+  height: 80vh !important;
+  width: 100% !important;
+}
+
+.exp_opis_in {
+  margin: 2%;
+}
+
+.exp_opis > p {
+  padding-top: 2%;
+}
+
+.exp_row {
+  height: 200px;
+}
+
+.aos-init {
+  margin-bottom: 2%;
+}
+
+.card {
+  height: 100%;
+  vertical-align: middle;
+  margin-bottom: 5%;
+}
+
+.card-text {
+  margin: 0;
+}
+
+.card-text, .card-text > li {
+  font-size: 1.5rem;
+}
+
+.err {
+  color: #b86303;
+}
+
+@media screen and (max-width: 411px) {
+  nav {
+    margin-left: 0;
+  }
+
+  h1 {
+    font-size: 1rem;
+    padding-top: 10%;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

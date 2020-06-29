@@ -58,8 +58,12 @@
                     <Button x:Name="Btn_grid"  Width="40" Margin="5" ToolTip="Показать/скрыть сетку" Click="Btn_grid_Click" MouseEnter="Btn_grid_MouseEnter" MouseLeave="Btn_grid_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                         <Image  x:Name="Img_grid" Source="Resources/border.png" Margin="2" Height="30" />
                     </Button>
-                    
-                    <Button x:Name="Btn_del" Width="40" Margin="5" Click="Btn_del_Click" ToolTip="Очистить холст" MouseEnter="Btn_del_MouseEnter" MouseLeave="Btn_del_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0" >
+
+                        <Button x:Name="Btn_size"  Width="40" Margin="5" ToolTip="Показать/скрыть размеры" Click="Btn_size_Click" MouseEnter="Btn_size_MouseEnter" MouseLeave="Btn_size_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Image  x:Name="Img_size" Source="Resources/size.png" Margin="2" Height="30" />
+                    </Button>
+
+                        <Button x:Name="Btn_del" Width="40" Margin="5" Click="Btn_del_Click" ToolTip="Очистить холст" MouseEnter="Btn_del_MouseEnter" MouseLeave="Btn_del_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0" >
                         <Image  x:Name="Img_del" Source="Resources/delete.png" Margin="2" Height="30" />
                     </Button>
 

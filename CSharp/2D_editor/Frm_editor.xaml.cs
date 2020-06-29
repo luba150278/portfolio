@@ -21,6 +21,7 @@ namespace GoToKnit_
         bool prov_polygon_click = false;
         bool prov_add_point = false;
         bool prov_del_point = false;
+        bool prov_size = false;
         protected Boolean isDragging;
         private Point mousePosition;
         private Double prevX, prevY;
@@ -129,8 +130,8 @@ namespace GoToKnit_
                 if (x % shag == 0)
                 {
                     z = 2;
-                    Tb_forline((x / ris).ToString(), true, x, -ris, Colors.Purple);
-                    Tb_forline((x / ris).ToString(), true, x, h, Colors.Purple);
+                    Tb_forline((x / ris).ToString(), true, x, -ris, Colors.Purple, true);
+                    Tb_forline((x / ris).ToString(), true, x, h, Colors.Purple, true);
                 }
                 AddLineToBackground(x, 0, x, h, z, Brushes.LightGray);
                 z = 1;
@@ -140,8 +141,8 @@ namespace GoToKnit_
                 if (y % shag == 0)
                 {
                     z = 2;
-                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, -20, y, Colors.Purple);
-                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, w, y, Colors.Purple);
+                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, -20, y, Colors.Purple, true);
+                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, w, y, Colors.Purple, true);
 
                 }
                 AddLineToBackground(0, y, w, y, z, Brushes.LightGray);
@@ -175,7 +176,7 @@ namespace GoToKnit_
             foreach (Ellipse el1 in el) Panel.SetZIndex(el1, 9999);
         }
 
-        private void Tb_forline(string mstr, bool rot, double x, double y, Color clr)// текстовые надписи
+        private void Tb_forline(string mstr, bool rot, double x, double y, Color clr, bool parent)// текстовые надписи; parent=true - background, false - main_canvas
         {
             TextBlock tb = new TextBlock();
             tb.Text = mstr;
@@ -183,7 +184,8 @@ namespace GoToKnit_
             if (rot == true) tb.LayoutTransform = new RotateTransform(-90);
             Canvas.SetLeft(tb, x);
             Canvas.SetTop(tb, y);
-            Background.Children.Add(tb);
+            if (parent == true) { Background.Children.Add(tb); }
+            else { MainCanvas.Children.Add(tb); }
         }
 
         private void Btn_dec_Click(object sender, RoutedEventArgs e)
@@ -374,33 +376,35 @@ namespace GoToKnit_
 
         private void Poisk_line_in_polygon( double x, double y)
         {
-            int index=99999;
-            double ymin;
-            double ymax ;
-            double xmin;
-            double xmax ;
+            //при добавлении точки на отрезок проверяем правило - сумма длин отрезков = длине отрезка до разбиения
+            int index=99999;            
+            double dlin;
+            double dlin1;
+            double dlin2;
+
             int MC = main_polygon.Points.Count - 1;
             for (int i=1; i<main_polygon.Points.Count; i++)
             {
-                ymin = Math.Min(main_polygon.Points[i].Y, main_polygon.Points[i-1].Y);
-                ymax = Math.Max(main_polygon.Points[i].Y, main_polygon.Points[i - 1].Y);
-                xmin = Math.Min(main_polygon.Points[i].X, main_polygon.Points[i - 1].X);
-                xmax = Math.Max(main_polygon.Points[i].X, main_polygon.Points[i - 1].X);
-                if ((x <= xmax && x >= xmin) && (y <= ymax && y >= ymin))
-                {
-                    index = i - 1;                    
-                }
+                
+                dlin = Math.Round(Dlin_segment(list_pnts[i - 1].X, list_pnts[i - 1].Y, list_pnts[i].X, list_pnts[i].Y),0);
+                dlin1= Math.Round(Dlin_segment(list_pnts[i - 1].X, list_pnts[i - 1].Y, x / 10, (BG_korr - y) / 10),0);
+                dlin2 = Math.Round(Dlin_segment(list_pnts[i].X, list_pnts[i ].Y, x / 10, (BG_korr - y) / 10),0);
+               
+                if (dlin == dlin1 + dlin2) { index = i - 1; }
             }
 
-            ymin = Math.Min(main_polygon.Points[0].Y, main_polygon.Points[MC].Y);
-            ymax = Math.Max(main_polygon.Points[0].Y, main_polygon.Points[MC].Y);
-            xmin = Math.Min(main_polygon.Points[0].X, main_polygon.Points[MC].X);
-            xmax = Math.Max(main_polygon.Points[0].X, main_polygon.Points[MC].X);
-            if ((x <= xmax && x >= xmin) && (y <= ymax && y >= ymin))
+            if (index == 99999)
             {
-                index = MC+1;
-            }
-            
+                
+                dlin = Math.Round(Dlin_segment(list_pnts[0].X, list_pnts[0].Y, list_pnts[MC].X, list_pnts[MC].Y),0);
+                dlin1 = Math.Round(Dlin_segment(list_pnts[0].X, list_pnts[0].Y, x/10, (BG_korr-y)/10),0);
+                dlin2 = Math.Round(Dlin_segment(list_pnts[MC].X, list_pnts[MC].Y, x/10, (BG_korr - y) / 10),0);
+                
+                if (dlin == dlin1 + dlin2) index = MC + 1;
+
+            }     
+                     
+                
             if (index == 99999) return;
             int k = 0;
             pnts = new List<Points_new>();
@@ -408,9 +412,10 @@ namespace GoToKnit_
             {
                 if (i < index || i>index) { pnts.Add(new Points_new(k++, main_polygon.Points[i].X, main_polygon.Points[i].Y)); }
                 if(i==index)
-                { 
-                    pnts.Add(new Points_new(k++, main_polygon.Points[i].X, main_polygon.Points[i].Y));
-                    pnts.Add(new Points_new(k++, x, y));
+                {
+                   
+                        pnts.Add(new Points_new(k++, main_polygon.Points[i].X, main_polygon.Points[i].Y));
+                        pnts.Add(new Points_new(k++, x, y));                   
                 }               
             }
 
@@ -418,8 +423,9 @@ namespace GoToKnit_
 
             var pg=Background.Children.OfType<Polygon>().ToList();
             foreach (Polygon pg_ch in pg) Background.Children.Remove(pg_ch);
-            prov_poligon = false;
+            prov_poligon = false;            
             Draw_poligon();
+            //Pixel_to_koord();
 
         }
         private void Btn_polyline_Click(object sender, RoutedEventArgs e)
@@ -482,6 +488,9 @@ namespace GoToKnit_
             prov_polygon_click = false;
             prov_poligon = false;
             prov_add_point = false;
+            LB_info.Content = "";
+            LB_otr.Content = "";
+            Size_del();
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -764,142 +773,142 @@ namespace GoToKnit_
             int num_min = 0;
             int perv_chas;
             int k = 1;
-           
-                list_main = new List<Points_new>();
 
-                list_pnts = new List<Points_new>();
-                for (int i = 0; i < main_polygon.Points.Count; i++)
+            list_main = new List<Points_new>();
+
+            list_pnts = new List<Points_new>();
+            for (int i = 0; i < main_polygon.Points.Count; i++)
+            {
+                list_pnts.Add(new Points_new(i + 1, main_polygon.Points[i].X / 10, (BG_korr - main_polygon.Points[i].Y) / 10));
+            }
+
+            double y = list_pnts.AsQueryable().Min(x => x.Y);
+            List<Points_new> list_prov = list_pnts.FindAll(item => item.Y == y);
+
+            if (list_prov.Count == 1)
+            {
+                num_min = list_prov[0].n;
+            }
+            else
+            {
+                double x = list_prov.AsQueryable().Min(item => item.X);
+                list_prov = list_prov.FindAll(item => item.X == x);
+                num_min = list_prov[0].n;
+            }
+
+            if (num_min == 1)//первая точка - точка минимума
+            {
+                if (list_pnts[1].X < list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[list_pnts.Count - 1].X - list_pnts[1].X) > 0.5)
                 {
-                    list_pnts.Add(new Points_new(i+1, main_polygon.Points[i].X / 10, (BG_korr - main_polygon.Points[i].Y) / 10));
+                    perv_chas = list_pnts[1].n;
                 }
+                else if (list_pnts[1].X > list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[1].X - list_pnts[list_pnts.Count - 1].X) > 0.5) { perv_chas = list_pnts[list_pnts.Count - 1].n; }
+                else
+                {//равная координата х
 
-                double y = list_pnts.AsQueryable().Min(x => x.Y);
-                List<Points_new> list_prov = list_pnts.FindAll(item => item.Y == y);
-
-                if (list_prov.Count == 1)
+                    if (list_pnts[1].Y > list_pnts[list_pnts.Count - 1].Y) { perv_chas = list_pnts[1].n; }
+                    else { perv_chas = list_pnts[list_pnts.Count - 1].n; }
+                }
+            }
+            else
+            {
+                if (num_min == list_pnts[list_pnts.Count - 1].n)//последняя точка
                 {
-                    num_min = list_prov[0].n;
+                    if (list_pnts[0].X < list_pnts[list_pnts.Count - 2].X)
+                    {
+                        perv_chas = list_pnts[0].n;
+                    }
+                    else { perv_chas = list_pnts[list_pnts.Count - 2].n; }
                 }
                 else
                 {
-                    double x = list_prov.AsQueryable().Min(item => item.X);
-                    list_prov = list_prov.FindAll(item => item.X == x);
-                    num_min = list_prov[0].n;
-                }
-
-                if (num_min == 1)//первая точка - точка минимума
-                {
-                    if (list_pnts[1].X < list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[list_pnts.Count - 1].X - list_pnts[1].X) > 0.5)
+                    if (list_pnts[num_min - 2].X < list_pnts[num_min].X && (Math.Abs(list_pnts[num_min].X - list_pnts[num_min - 2].X) > 0.5))
                     {
-                        perv_chas = list_pnts[1].n;
+                        perv_chas = list_pnts[num_min - 2].n;
                     }
-                    else if (list_pnts[1].X > list_pnts[list_pnts.Count - 1].X && Math.Abs(list_pnts[1].X - list_pnts[list_pnts.Count - 1].X) > 0.5) { perv_chas = list_pnts[list_pnts.Count - 1].n; }
+                    else if (list_pnts[num_min - 2].X > list_pnts[num_min].X && (Math.Abs(list_pnts[num_min - 2].X - list_pnts[num_min].X) > 0.5)) { perv_chas = list_pnts[num_min].n; }
                     else
                     {//равная координата х
 
-                        if (list_pnts[1].Y > list_pnts[list_pnts.Count - 1].Y) { perv_chas = list_pnts[1].n; }
-                        else { perv_chas = list_pnts[list_pnts.Count - 1].n; }
+                        if (list_pnts[num_min - 2].Y > list_pnts[num_min].Y) { perv_chas = list_pnts[num_min - 2].n; }
+                        else { perv_chas = list_pnts[num_min].n; }
                     }
                 }
-                else
-                {
-                    if (num_min == list_pnts[list_pnts.Count - 1].n)//последняя точка
-                    {
-                        if (list_pnts[0].X < list_pnts[list_pnts.Count - 2].X)
-                        {
-                            perv_chas = list_pnts[0].n;
-                        }
-                        else { perv_chas = list_pnts[list_pnts.Count - 2].n; }
-                    }
-                    else
-                    {
-                        if (list_pnts[num_min - 2].X < list_pnts[num_min].X && (Math.Abs(list_pnts[num_min].X - list_pnts[num_min - 2].X) > 0.5))
-                        {
-                            perv_chas = list_pnts[num_min - 2].n;
-                        }
-                        else if (list_pnts[num_min - 2].X > list_pnts[num_min].X && (Math.Abs(list_pnts[num_min - 2].X - list_pnts[num_min].X) > 0.5)) { perv_chas = list_pnts[num_min].n; }
-                        else
-                        {//равная координата х
 
-                            if (list_pnts[num_min - 2].Y > list_pnts[num_min].Y) { perv_chas = list_pnts[num_min - 2].n; }
-                            else { perv_chas = list_pnts[num_min].n; }
-                        }
+            }
+
+            list_prov = list_pnts.FindAll(item => item.n == num_min);
+            list_main.Add(new Points_new(k, list_prov[0].X, list_prov[0].Y));
+            k++;
+            //MessageBox.Show("num" + num_min + "ch" + perv_chas);
+            if (num_min < perv_chas)
+            {
+                if (perv_chas != list_pnts.Count)
+                {
+                    for (int i = perv_chas - 1; i < list_pnts.Count; i++)
+                    {
+                        list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                        k++;
                     }
 
-                }
-
-                list_prov = list_pnts.FindAll(item => item.n == num_min);
-                list_main.Add(new Points_new(k, list_prov[0].X, list_prov[0].Y));
-                k++;
-                //MessageBox.Show("num" + num_min + "ch" + perv_chas);
-                if (num_min < perv_chas)
-                {
-                    if (perv_chas != list_pnts.Count)
+                    if (num_min > 1)
                     {
-                        for (int i = perv_chas - 1; i < list_pnts.Count; i++)
+                        for (int i = 0; i <= num_min - 2; i++)
                         {
                             list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
                             k++;
                         }
-
-                        if (num_min > 1)
+                    }
+                }
+                else
+                {
+                    for (int i = perv_chas - 1; i >= 0; i--)
+                    {
+                        if (i + 1 != num_min)
                         {
-                            for (int i = 0; i <= num_min - 2; i++)
-                            {
-                                list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                                k++;
-                            }
+                            list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                            k++;
                         }
                     }
-                    else
+                }
+            }
+            else
+            {
+                if (num_min == list_pnts.Count)
+                {
+                    if (perv_chas != 1)
                     {
                         for (int i = perv_chas - 1; i >= 0; i--)
                         {
-                            if (i + 1 != num_min)
-                            {
-                                list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                                k++;
-                            }
+                            list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                            k++;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i <= num_min - 2; i++)
+                        {
+                            list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                            k++;
                         }
                     }
                 }
                 else
                 {
-                    if (num_min == list_pnts.Count)
+                    for (int i = perv_chas - 1; i == 0; i--)
                     {
-                        if (perv_chas != 1)
-                        {
-                            for (int i = perv_chas - 1; i >= 0; i--)
-                            {
-                                list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                                k++;
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i <= num_min - 2; i++)
-                            {
-                                list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                                k++;
-                            }
-                        }
+                        list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                        k++;
                     }
-                    else
-                    {
-                        for (int i = perv_chas - 1; i == 0; i--)
-                        {
-                            list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                            k++;
-                        }
 
-                        for (int i = list_pnts.Count - 1; i >= num_min; i--)
-                        {
-                            list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
-                            k++;
-                        }
+                    for (int i = list_pnts.Count - 1; i >= num_min; i--)
+                    {
+                        list_main.Add(new Points_new(k, list_pnts[i].X, list_pnts[i].Y));
+                        k++;
                     }
                 }
-            
+            }
+
         }
 
         private void Draw_poligon()
@@ -947,6 +956,7 @@ namespace GoToKnit_
                 segment.Points.Clear();
                 Background.Children.Remove(segment);
                 prov_poligon = true;
+               
                 Info_label();
             }
         }
@@ -993,6 +1003,7 @@ namespace GoToKnit_
         {
             double sum_squ = 0;
             int MC = list_main.Count - 1;
+            
             for (int i = 0; i <= MC; i++)//dt_squ.Rows.Count - 1
             {
                 if (i < MC) { sum_squ = sum_squ + list_main[i].X * list_main[i + 1].Y - list_main[i].Y * list_main[i + 1].X; }
@@ -1323,15 +1334,13 @@ namespace GoToKnit_
                 prov_ell_click = false;
             }
             catch
-            {
+            {                
                 prevX = 0;
-                prevY = 0;
-                //TextBlock tb = new TextBlock();
-                //tb.Text = "Кликните клавишу Esc для нормализации редактора";
-                //tb.Foreground = Brushes.Red;
-                //MainCanvas.Children.Add(tb);
+                prevY = 0;                
                 Esc_call();
-                prov_ell_click = false;
+                prov_ell_click = false;               
+                var fld = MainCanvas.Children.OfType<Line>().ToList();
+                foreach (Line kn in fld) MainCanvas.Children.Remove(kn);
             }
         }
 
@@ -1348,6 +1357,7 @@ namespace GoToKnit_
             }
 
             for (int i = 0; i < main_polygon.Points.Count; i++) Make_ellipse(main_polygon.Points[i].X, main_polygon.Points[i].Y, true);
+            //Pixel_to_koord();
             Info_label();
             Ellip_events();
         }
@@ -1801,6 +1811,325 @@ namespace GoToKnit_
         private void Btn_del_point_MouseLeave(object sender, MouseEventArgs e)
         {
             if (prov_del_point == false) Cnange_img(Img_del_point, "Resources/del_point.png", false);
+        }
+
+        void Size_del()
+        {
+            var ln = MainCanvas.Children.OfType<Line>().ToList();
+            foreach (Line ln1 in ln) MainCanvas.Children.Remove(ln1);
+            var tb = MainCanvas.Children.OfType<TextBlock>().ToList();
+            foreach (TextBlock tb1 in tb) MainCanvas.Children.Remove(tb1);
+            return;
+        }
+        private void Btn_size_Click(object sender, RoutedEventArgs e)
+        {
+
+            //Line ln1, ln2, ln3;
+            try
+            {
+                if (main_polygon.Points.Count == 0) return;
+                _ = prov_size == false ? prov_size = true : prov_size = false;
+             
+
+                if (prov_size == false)
+                {
+                    Size_del();
+                }
+
+                if (prov_size == true)
+                {
+                    double x1, x2, y1, y2;
+                    string str;
+                    double p = 0;
+                    for (int i = 0; i < main_polygon.Points.Count; i++)
+                    {
+                        if (i < main_polygon.Points.Count - 1)
+                        {
+                            x1 = main_polygon.Points[i].X;
+                            x2 = main_polygon.Points[i + 1].X;
+                            y1 = main_polygon.Points[i].Y;
+                            y2 = main_polygon.Points[i + 1].Y;
+                        }
+                        else
+                        {
+                            x1 = main_polygon.Points[i].X;
+                            x2 = main_polygon.Points[0].X;
+                            y1 = main_polygon.Points[i].Y;
+                            y2 = main_polygon.Points[0].Y;
+                        }
+
+                        if (Math.Round(Math.Abs(x1 - x2), 0) <= 3)//вертикальная
+                        {
+                            int k = -40;
+                            int n = 10;
+                            int prov = Prov_size_line((x1 + k) / 10, (BG_korr - (y1 + y2) / 2) / 10, 10000, (BG_korr - (y1 + y2) / 2) / 10, 1);
+                            //MessageBox.Show("" + prov);
+                            if (prov % 2 != 0) { k = -(k); n = -(n); }
+                            AddLineToSize(x1, y1, x1 + k, y1, Brushes.Blue);
+                            AddLineToSize(x2, y2, x2 + k, y2, Brushes.Blue);
+                            AddLineToSize(x1 + k + n, y1, x2 + k + n, y2, Brushes.Blue);
+                            str = Math.Round((Math.Abs(y1 - y2) / 10), 1).ToString();
+                            p = 0;
+                            _ = prov % 2 == 0 ? p = x2 + k * 1.2 : p = x2 - n;
+                            Tb_forline(str, true, p, (y1 + y2) / 2 - 5, Colors.Red, false);
+                        }
+                        else if (Math.Round(Math.Abs(y1 - y2), 0) <= 3)//горизонтальная
+                        {
+                            int k = -40;
+                            int n = 10;
+
+                            int prov = Prov_size_line((x1 + x2) / 20, (BG_korr - y1 + k) / 10, (x1 + x2) / 20, 10000, 2);
+                            //MessageBox.Show("" + prov);
+                            if (prov % 2 == 0) { k = -(k); n = -(n); }
+
+                            AddLineToSize(x1, y1, x1, y1 + k, Brushes.Blue);
+                            AddLineToSize(x2, y2, x2, y2 + k, Brushes.Blue);
+                            AddLineToSize(x1, y1 + k + n, x2, y2 + k + n, Brushes.Blue);
+                            str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                            p = 0;
+                            _ = prov % 2 != 0 ? p = y1 + k * 1.2 : p = y1 - n;
+                            Tb_forline(str, false, (x1 + x2) / 2 - 5, p, Colors.Red, false);
+                        }
+                        else//наклонные
+                        {
+                           
+                            int prov = 0;
+                            int k = 20;
+                            double y_podst = (BG_korr - (y1 + y2) / 2) / 10;
+                            double y_in_text = (y1 + y2) / 2 - 5;
+                            double x_in_text = (x1 + x2) / 2-10;
+
+                           if (x1<x2 && y1<y2)// 4 вариант
+                            {
+                                prov = Prov_size_line(x1 / 10 + 1, y_podst, 10000, y_podst, 3);
+                                if(prov % 2 != 0)
+                                {
+                                    AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная  
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();                                   
+                                    Tb_forline(str, true, x2-k, y_in_text, Colors.Red, false);
+
+                                   
+                                    AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();                                    
+                                    Tb_forline(str, false, x_in_text , y1-k, Colors.Red, false);
+                                }
+                                else
+                                {
+                                    AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная   
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false);
+
+
+                                    AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false);
+                                }
+                            }
+
+                           if(x1>x2 && y1>y2)//3var
+                           {
+                                prov= Prov_size_line(x2 / 10 + 1, y_podst, 10000, y_podst, 3);
+                                if (prov % 2 != 0)
+                                {
+                                    AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная    
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false);
+                                }
+                                else
+                                {
+                                    AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная    
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false);
+                                }
+
+                           }
+
+                            if (x1 > x2 && y1 < y2)//2var
+                            {
+                                prov = Prov_size_line(x2 / 10 + 1, y_podst, 10000, y_podst, 3);
+                                if (prov % 2 == 0)
+                                {
+                                    AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная  
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false);
+                                }
+                                else
+                                {
+                                    AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная   
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false);
+                                }
+
+                            }
+
+                            if (x1 < x2 && y1 > y2)//1var
+                            {
+                                prov = Prov_size_line(x1 / 10 + 1, y_podst, 10000, y_podst, 3);
+                                if (prov % 2 != 0)
+                                {
+                                    AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная 
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false);
+                                }
+                                else
+                                {
+                                    AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная 
+                                    str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false);
+
+                                    AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
+                                    str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        int Prov_size_line(double x1, double y1, double x2, double y2, int napr)//napr=1 - вертик, 2 - горизонт,3 - наклон
+        {
+            double x3, y3, x4, y4;
+            int prov = 0;
+            for (int i = 0; i < list_pnts.Count; i++)
+            {
+                if (i < list_pnts.Count - 1)
+                {
+                    x3 = list_pnts[i].X;
+                    x4 = list_pnts[i + 1].X;
+                    y3 = list_pnts[i].Y;
+                    y4 = list_pnts[i + 1].Y;
+                }
+                else
+                {
+                    x3 = list_pnts[i].X;
+                    x4 = list_pnts[0].X;
+                    y3 = list_pnts[i].Y;
+                    y4 = list_pnts[0].Y;
+                }
+
+                
+                //MessageBox.Show("x1:" + x1 + "y1:" + y1 + "x2:" + x2 + "y2:" + y2 + "x3:" + x3 + "y3:" + y3 + "x4:" + x4 + "y4:" + y4);
+                prov = prov + Poisk_cross(x1, y1, x2, y2, x3, y3, x4, y4);
+                //MessageBox.Show("cr:" + Poisk_cross(x1, y1, x2, y2, x3, y3, x4, y4));
+                if (y3==y1 || y4 == y1 && napr==1) { prov = prov + 1; }
+                //if(x3 == x1 || x4 == x1 && napr == 2) { prov = prov + 1; }
+            }               
+            
+            return prov;
+        }
+        int Poisk_cross(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+        {
+
+            //---------------------------
+            //параметры процедуры/функции
+            //x1,x2-координаты x первого отрезка; x3,x4 - координаты x второго отрезка
+            //y1,y2-координаты y первого отрезка; y3,y4 - координаты y второго отрезка;
+            //---------------------------
+            //Объявляем переменные
+            
+            double k1, k2, b1, b2, x_prov, y_prov;
+            double x_prom = x1;
+            double y_prom = y1;
+            if (x1 >= x2) { x1 = x2; y1 = y2; x2 = x_prom; y2 = y_prom; }
+            x_prom = x3;
+            y_prom = y3;
+            if (x3 >= x4) { x3 = x4; y3 = y4; x4 = x_prom; y4 = y_prom; }
+            //---------------------------
+            if (y1 == y2) { k1 = 0; }
+            else
+            {
+                //if (x2 == x1) { k1 = 1E+29; }
+                //else { 
+                if (x2 == x1) { x2 = x2 + 0.1; }
+                    k1 = (y2 - y1) / (x2 - x1); 
+                //}
+            }
+
+            if (y3 == y4) { k2 = 0; }
+            else
+            {
+                if (x3 == x4) { x4 = x4 + 0.1; }
+                k2 = (y4 - y3) / (x4 - x3);
+            }
+
+            if (k1 == k2) { return 0; } //отрезки не пересекаются
+            b1 = y1 - k1 * x1;
+
+            if (x3 == x4) { x_prov = x3; }
+            else
+            {
+                b2 = y3 - k2 * x3;
+                x_prov = (b2 - b1) / (k1 - k2);
+            }
+            y_prov = k1 * x_prov + b1;
+
+            //MessageBox.Show("x:" + x_prov + "y:" + y_prov);
+            if ((x1 <= x_prov && x_prov <= x2) && (x3 <= x_prov && x_prov <= x4)) { return 1; } //отрезки пересекаются
+            else { return 0; } //отрезки не пересекаются
+        }
+        double Square_fig(List<Points_new> list_main)
+        {
+
+            double sum_squ = 0;
+            int MC = list_main.Count - 1;
+            for (int i = 0; i <= MC; i++)//dt_squ.Rows.Count - 1
+            {
+                if (i < MC) { sum_squ = sum_squ + list_main[i].X * list_main[i + 1].Y - list_main[i].Y * list_main[i + 1].X; }
+                if (i == MC) { sum_squ = sum_squ + list_main[i].X * list_main[0].Y - list_main[i].Y * list_main[0].X; }
+            }
+
+            return Math.Round(-sum_squ / 2, 1);
+        }
+        void AddLineToSize(double x1, double y1, double x2, double y2, Brush clr)
+        {
+            var line = new Line()
+            {
+                X1 = x1,
+                Y1 = y1,
+                X2 = x2,
+                Y2 = y2,
+                Stroke = clr,               
+                SnapsToDevicePixels = true
+            };
+            line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
+            MainCanvas.Children.Add(line);
+            
+        }
+        private void Btn_size_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_size, "Resources/size1.png", true);
+        }
+
+        private void Btn_size_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Cnange_img(Img_size, "Resources/size.png", false);
         }
 
         void Change_poligon()

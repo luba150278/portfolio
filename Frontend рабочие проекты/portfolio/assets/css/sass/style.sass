@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap')
+
+$cg:#02667a
+$cr: #d3325d
+$cdg: #faf6f7
+$t2: 2%
+$t5: 5%
+$t10: 10%
+$t15: 15%
+
+@mixin scrl
+  width: 100%
+  max-width: 100%
+  overflow-x: hidden
+
+@mixin pd
+  padding: 0
+  margin: 0  
+
+@mixin td
+  text-decoration: none
+  padding: 0
+
+@mixin bg
+  background-blend-mode: multiply 
+  background-position: top
+  background-repeat: no-repeat
+  background-size: cover
+  background-color: rgba(154, 159, 179, 0.5)
+  
+
+html
+  @include scrl
+
+body
+  @include pd
+  @include scrl 
+  font-family: 'Fira Sans', sans-serif
+  font-size: 1rem
+  color: $cg
+h3
+  font-size: 1.8rem
+h4
+  font-size: 1.2rem
+header  
+  @mixin pd
+  background: rgba(247, 251, 236, 1)
+  font-size: 1.5rem
+  // position: fixed 
+  // top: 0
+  // z-index: 100
+  width: 100%
+  display: flex
+  align-items: center 
+  justify-content: center
+
+nav
+  width: 90%
+
+a
+  white-space: nowrap
+li
+  margin: 0 $t5
+.navbar
+  margin: 0 $t15
+  &-light
+    .navbar-nav
+      .nav-item      
+        .nav-link
+          color: $cg
+          @include td
+          &-active, &:hover
+            color: $cr
+            @include td
+
+.b-cont
+  display: flex
+  justify-content: center
+  margin: 3%
+.btn-danger
+  margin-right: 2%
+.btn-light
+  color: $cg
+  &:hover
+    color: $cr
+  
+#about_me 
+  background-image: url('../img/digital_tr.webp') 
+  @include bg
+  
+#about_me>.container 
+  padding-top: 5%
+  padding-bottom: 5%
+
+.b_about>div
+  margin-bottom: 2%
+.about_block
+  background: rgba(255, 255, 255, 0.7)
+  padding: 5%  
+.about_block_img
+  padding: 0
+  max-width: 400px
+.b-title
+  margin: 2% 0 5% 0
+h1, h2
+  color: $cdg
+  font-weight: bold
+  font-size: 2.5rem
+  
+
+.img_body
+  padding: 0
+  max-height: 0!important
+  min-height: 0!important
+ul
+  padding-inline-start: 0
+
+.resume
+  display: inline-flex
+.resume>div
+  text-align: center
+  
+.b-github
+  margin-left: 5%
+  
+.fab, .fas
+  font-size: 3rem
+
+.h-dark
+  color: $cg
+  margin: 2% 0
+.project_p
+  font-size: 1.2rem
+  margin-bottom: 1.5%
+
+.pr_col
+  margin-bottom: 5% 
+  text-align: center
+  &:hover
+    cursor: pointer
+.pr_img
+  margin: 2%
+.pr_img
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(219,215,219,1)
+  -moz-box-shadow: 10px 10px 5px 0px rgba(219,215,219,1)
+  box-shadow: 10px 10px 5px 0px rgba(219,215,219,1)
+  display: inline-block
+  overflow: hidden 
+  transition: 1s  
+  margin-top: 5%
+  
+  &:hover    
+    transform: scale(1.05)     
+    
+
+.pr_img a img
+  position: relative
+.txt_h
+  position: absolute
+  top: 2%
+  //left: 5%
+  visibility: hidden
+  margin: 10%
+
+.txt_h h4, .txt_h p
+  color: white
+  font-size: 0.95rem  
+.txt_h h4
+  font-size: 1.1rem 
+
+
+#skills 
+  margin-top: 3% 
+  background-image: url('../img/digital_tr.webp') 
+  @include bg
+
+#skills>.container
+  padding-bottom: 2%
+
+#skills div h2
+  padding: 2% 0
+
+.skills_div
+  margin-bottom: 5%
+
+.skills_row
+  @include pd
+
+.fa-circle
+  margin-left: 2%
+  margin-top: 2%
+  font-size: 1rem
+
+#contacts
+  @include pd
+  background-image: url('../img/contacts2.webp') 
+  @include bg  
+#contacts>.container
+  padding: 2% 0
+
+.contacts_block
+  background: rgba(255, 255, 255, 0.7)
+
+.row_contact
+  padding: 2% 0
+  margin: 0 8%
+.row_contact>div
+  text-align: center
+.b-cont2
+  margin: auto
+
+.p_email
+  font-size: 1.5rem
+
+//Отзывы
+.fa-chevron-left, .fa-chevron-right
+  font-size: 2rem
+.carousel-indicators .active
+  background-color: $cg
+.carousel-indicators li
+  background-color: #464444
+.carousel-inner
+  height: 300px
+  position: relative
+ 
+.carousel-item
+  position: absolute
+  height: 100%
+.carousel-caption,.carousel-control-prev, .carousel-control-prev:hover, .carousel-control-next:hover,.carousel-control-next
+  color: $cg!important
+.carousel-caption
+  @include pd
+  padding-bottom: 60px
+
+#message-text
+  height: 25vh
+
+
+footer
+  margin-top: 10%
+  background-color: $cg
+  color: white
+footer a
+  text-decoration: none
+  color: white
+  &:hover
+    text-decoration: none
+    color: $cr
+    
+footer>.container
+  padding: 2% 0
+footer>.container>h2
+  margin-bottom: 5% 
+footer>.container .row
+  margin: 0 10%
+footer>.container li
+  list-style-type: none
+  margin-bottom: 2%
+.foot_cont
+  display: inline-flex
+.foot_cont_email
+  cursor: pointer
+  &:hover
+    color: $cr 
+.foot_cont .fas
+  margin-right: 5%
+.foot_cont_par
+  margin-bottom: 10%
+footer .toAnchor
+  color: white
+  font-size: 2rem
+  font-weight: bold
+  &:hover
+    text-decoration: none
+    color: $cr
+
+
+
+
+@media screen and (max-width: 1024px)
+  body
+    font-size: 1.5rem  
+ 
+@media screen and (max-width: 823px)
+  h1,h2
+    margin-top: $t10
+
+@media screen and (max-width: 823px) and (orientation:landscape)
+  .carousel-inner
+    height: 250px  
+
+@media screen and (max-width: 667px) and (orientation:landscape)
+  .carousel-inner
+    height: 200px
+  .carousel-caption    
+    padding-bottom: 20px
+
+@media screen and (max-width: 375px)
+  h1,h2
+    margin-top: $t15
+  .carousel-caption    
+    padding-bottom: 20px
+  .txt_h h4, .txt_h p
+    font-size: 0.9rem  
+
+@media screen and (max-width: 320px)
+  .row_contact     
+    margin: 5% auto
+  .txt_h h4, .txt_h p
+    font-size: 0.8rem 
+
+@media screen and (max-width: 280px)
+  body
+    font-size: 0.9rem
+  h1, h2
+    font-size: 2rem  
+  h3, footer .toAnchor
+    font-size: 1.5rem
+  h4, li
+    font-size: 1.2rem
+  h5
+    font-size: 1.1rem
+  .p_email
+    font-size: 1.2rem
+  .project_p
+    font-size: 1rem
+  .text-align .btn-primary
+    margin: 0
+    padding: 10% 20%
+    max-width: 40px
+  .b-cont2> button, .btn_call
+    margin-bottom: 2%
+    width: 200px
+  
+
+
+  
+

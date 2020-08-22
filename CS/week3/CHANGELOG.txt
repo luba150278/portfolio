@@ -1,0 +1,31 @@
+Task 1:
+ - removed try-catch construction and added the check block for the negative value of minutes.
+ - changed from integer to double the value of minutes. 
+ - replaced from the "public" to "private" modifier for all constants.
+ - changed names for methods and variables according to java rules. 
+ - improved the comment style.
+ 
+Task 2:
+ - added the correct check variant for the top-level value of integer numbers.
+ - removed the excess "try-catch" construction.
+ - changed names for methods and variables according to java rules. 
+ - improved the comment style.
+ 
+Task 3:
+ - used a new way checked degree value (without using Math.abs).
+ - changed names for methods and variables according to java rules.
+ - improved the comment style. 
+ 
+Task 4:
+ - did decomposition of the run method.
+ - replaced from the "public" to "private" modifier for all constants.
+ - changed names for methods and variables according to java rules.
+ - improved the comment style.
+ 
+Task 5:
+ - In the first variant of the code, I forgot to do the game counter. I fixed it.
+ - changed names for method and variables according to java rules.
+ 
+ Task 6:
+ - changed names for method and variables according to java rules.
+ 

@@ -1,0 +1,26 @@
+All tasks: 
+1. Added the descriptions of the "run" methods.
+2. Removed extra spaces
+
+Task1:
+1. Added checking option: we check coefficient <a>. It should not be equal to 0.
+2. Changed decomposition of code - create two methods ("Ask_coefficients" and "Find_roots"). These methods call from the "run" method.
+
+Task 2:
+1. Use cycles for added circles.
+2. Changed method "Add_circle" for more clear decomposition.
+3. Added method "Add_rect" for more clear decomposition.
+
+Task 3:
+1. Changed decomposition of code: in the "run" method we call "Add_oval" some times changing parameters of ovals (heel and toes).
+
+Task 4:
+1. Changed decomposition of code: clearing the "run" method and adding of label moved into a separate method.
+2. Removed "magic" numbers. I used them for defining application sizes. But it was the wrong way.
+
+Task 5:
+1. Changed decomposition of code: clearing the "run" method and part of code transfer to "Add_Rect" method.
+2. Removed "magic" numbers. I used them for defining application sizes. But it was the wrong way.
+
+Task 6:
+1. Changed decomposition of code: clearing the "run" method and part of code transfer to "Add_Oval" method.

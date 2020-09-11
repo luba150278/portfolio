@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The First Vuejs project</title>
+  <!-- версия для разработки, отображает полезные предупреждения в консоли -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="app" >
+    <h1 @click="nameFunction">Luba</h1>
+       <ul>
+         <li v-for="item in list">{{ item }}</li>
+       </ul>
+
+       <ul>
+         <li  v-for="user in users">{{user.id}} : {{user.name}}</li>
+       </ul>
+  </div>
+
+  <script type="text/javascript">
+     var app = new Vue({
+        el: '#app',
+        data: {
+          list: ['one', 'two', 'three'],
+          users: [
+            {id:1, name:'Luba'},
+            {id:2, name:'Masha'},
+            {id:3, name:'Dasha'}
+        ]
+        },
+        methods:{ 
+        nameFunction(){
+          alert("111");
+        }
+      }
+
+      }
+        
+      )
+  </script>
+</body>
+</html>

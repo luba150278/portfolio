@@ -16,7 +16,7 @@
             <Separator />
             <MenuItem Header="Переместить точки">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                   
+
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label >X</Label>
                         <TextBox x:Name="TB_X1" Width="40">0</TextBox>
@@ -32,51 +32,81 @@
                     </Button>
 
                 </StackPanel>
-            </MenuItem> 
+            </MenuItem>
         </ContextMenu>
     </Window.Resources>
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-    <Grid>
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
                 <ColumnDefinition Width="0.9*"/>
-                
+
             </Grid.ColumnDefinitions>
 
 
             <Border x:Name="BD_models" CornerRadius="20" Margin="8" Background="#FFFBF6EF" Grid.Column="0">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#FFA49F9F"/>
-                    </Border.Effect>          
-          
-            <StackPanel >
+                <Border.Effect>
+                    <DropShadowEffect Color="#FFA49F9F"/>
+                </Border.Effect>
+
+                <StackPanel >
                     <!--<StackPanel.Effect>
                         <DropShadowEffect Color="#FFA49F9F"/>
                     </StackPanel.Effect>-->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="Btn_grid"  Width="40" Margin="5" ToolTip="Показать/скрыть сетку" Click="Btn_grid_Click" MouseEnter="Btn_grid_MouseEnter" MouseLeave="Btn_grid_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                        <Image  x:Name="Img_grid" Source="Resources/border.png" Margin="2" Height="30" />
-                    </Button>
 
-                        <Button x:Name="Btn_size"  Width="40" Margin="5" ToolTip="Показать/скрыть размеры" Click="Btn_size_Click" MouseEnter="Btn_size_MouseEnter" MouseLeave="Btn_size_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                        <Image  x:Name="Img_size" Source="Resources/size.png" Margin="2" Height="30" />
-                    </Button>
 
-                        <Button x:Name="Btn_del" Width="40" Margin="5" Click="Btn_del_Click" ToolTip="Очистить холст" MouseEnter="Btn_del_MouseEnter" MouseLeave="Btn_del_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0" >
-                        <Image  x:Name="Img_del" Source="Resources/delete.png" Margin="2" Height="30" />
-                    </Button>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 2">
+                        <Button x:Name="Btn_undo"  Width="30" Height="30" Margin="3" ToolTip="Показать/скрыть сетку" Click="Btn_undo_Click" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_undo" Source="Resources/undo.png" Margin="2"/>
+                        </Button>
 
-                     <Button x:Name="Btn_save_det" Width="40"  Margin="5" Click="Btn_save_det_Click" ToolTip="Сохранить как деталь выкройки" MouseEnter="Btn_save_det_MouseEnter" MouseLeave="Btn_save_det_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                        <Image  x:Name="Img_save" Source="Resources/save.png" Margin="2" Height="30" />
-                    </Button>
-                </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button x:Name="Btn_some" Height="40" Margin="5" ToolTip="Выделить несколько точек" Click="Btn_some_Click" MouseEnter="Btn_some_MouseEnter" MouseLeave="Btn_some_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Button x:Name="Btn_redo" Width="30" Height="30" Margin="3" ToolTip="Показать/скрыть сетку" Click="Btn_redo_Click" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_redo" Source="Resources/redo.png" Margin="2"/>
+                        </Button>
+
+                        <Button x:Name="Btn_grid"  Width="30" Height="30" Margin="3" ToolTip="Показать/скрыть сетку" Click="Btn_grid_Click" MouseEnter="Btn_grid_MouseEnter" MouseLeave="Btn_grid_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_grid" Source="Resources/border.png" Margin="2" />
+                        </Button>
+
+                        <Button x:Name="Btn_size"    Width="30" Height="30" Margin="3" ToolTip="Показать/скрыть размеры" Click="Btn_size_Click" MouseEnter="Btn_size_MouseEnter" MouseLeave="Btn_size_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_size" Source="Resources/size.png" Margin="2"/>
+                        </Button>
+
+                        <Button x:Name="Btn_del"  Width="30" Height="30" Margin="3" Click="Btn_del_Click" ToolTip="Очистить холст" MouseEnter="Btn_del_MouseEnter" MouseLeave="Btn_del_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0" >
+                            <Image  x:Name="Img_del" Source="Resources/delete.png" Margin="2" />
+                        </Button>
+
+                        <Button x:Name="Btn_save_det"   Width="30" Height="30" Margin="3" Click="Btn_save_det_Click" ToolTip="Добавить выкройку в список деталей" MouseEnter="Btn_save_det_MouseEnter" MouseLeave="Btn_save_det_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_save" Source="Resources/save.png" Margin="2" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  Margin="0 2" HorizontalAlignment="Center">
+                        <Button x:Name="Btn_some" Width="30" Height="30" Margin="3" ToolTip="Выделить несколько точек" Click="Btn_some_Click" MouseEnter="Btn_some_MouseEnter" MouseLeave="Btn_some_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                             <Image  x:Name="Img_some" Source="Resources/select.png" Margin="2" Height="30" />
                         </Button>
-                       
+
+                        <Button x:Name="Btn_left" Width="30" Height="30" Margin="3" ToolTip="Сдвинуть выделенные точки влево" Click="Btn_left_Click" MouseEnter="Btn_left_MouseEnter" MouseLeave="Btn_left_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_left" Source="Resources/move_left.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_rignt" Width="30" Height="30" Margin="3" ToolTip="Сдвинуть выделенные точки вправо" Click="Btn_rignt_Click" MouseEnter="Btn_rignt_MouseEnter" MouseLeave="Btn_rignt_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_right" Source="Resources/move_right.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_up" Width="30" Height="30" Margin="3" ToolTip="Сдвинуть выделенные точки вверх" Click="Btn_up_Click" MouseEnter="Btn_up_MouseEnter" MouseLeave="Btn_up_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_up" Source="Resources/move_up.png" Margin="2" Height="30" />
+                        </Button>
+
+                        <Button x:Name="Btn_down" Width="30" Height="30" Margin="3" ToolTip="Сдвинуть выделенные точки вниз" Click="Btn_down_Click" MouseEnter="Btn_down_MouseEnter" MouseLeave="Btn_down_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                            <Image  x:Name="Img_down" Source="Resources/move_down.png" Margin="2" Height="30" />
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+
 
                         <Border BorderBrush="#FF5B89EE" BorderThickness="1" Margin="5">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -93,52 +123,33 @@
                                     <Label>Y</Label>
                                     <TextBox x:Name="TB_Y" Width="40">0</TextBox>
                                 </StackPanel>
-                                
+
 
                             </StackPanel>
                         </Border>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
-                        <Button x:Name="Btn_sim" Height="40" Width="40" Margin="5" ToolTip="Симметрия детали. Только для разомкнутого контура!" Click="Btn_sim_Click" MouseEnter="Btn_sim_MouseEnter" MouseLeave="Btn_sim_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Button x:Name="Btn_sim" Height="30" Width="30" Margin="3" ToolTip="Симметрия детали. Только для разомкнутого контура!" Click="Btn_sim_Click" MouseEnter="Btn_sim_MouseEnter" MouseLeave="Btn_sim_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                             <Image  x:Name="Img_sim" Source="Resources/sim.png" Margin="2" Height="30" />
                         </Button>
 
-                        <Button x:Name="Btn_close" Height="40" Width="40" Margin="5" ToolTip="Закрыть контур" Click="Btn_close_Click" MouseEnter="Btn_close_MouseEnter" MouseLeave="Btn_close_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Button x:Name="Btn_close" Height="30" Width="30" Margin="3" ToolTip="Закрыть контур" Click="Btn_close_Click" MouseEnter="Btn_close_MouseEnter" MouseLeave="Btn_close_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                             <Image  x:Name="Img_close" Source="Resources/point_close.png" Margin="2" Height="30" />
                         </Button>
 
-                        <Button x:Name="Btn_add_point" Height="40" Width="40" Margin="5" ToolTip="Добавить точку в существующий контур" Click="Btn_add_point_Click" MouseEnter="Btn_add_point_MouseEnter" MouseLeave="Btn_add_point_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Button x:Name="Btn_add_point" Height="30" Width="30" Margin="3" ToolTip="Добавить точку в существующий контур" Click="Btn_add_point_Click" MouseEnter="Btn_add_point_MouseEnter" MouseLeave="Btn_add_point_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                             <Image  x:Name="Img_add" Source="Resources/add_point.png" Margin="2" Height="30" />
                         </Button>
 
-                        <Button x:Name="Btn_del_point" Height="40" Width="40" Margin="5" ToolTip="Удалить точку из контура" Click="Btn_del_point_Click" MouseEnter="Btn_del_point_MouseEnter" MouseLeave="Btn_del_point_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
+                        <Button x:Name="Btn_del_point" Height="30" Width="30" Margin="3" ToolTip="Удалить точку из контура" Click="Btn_del_point_Click" MouseEnter="Btn_del_point_MouseEnter" MouseLeave="Btn_del_point_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
                             <Image  x:Name="Img_del_point" Source="Resources/del_point.png" Margin="2" Height="30" />
                         </Button>
 
                     </StackPanel>
-                
-
-                    <StackPanel Orientation="Horizontal"  Margin="5" HorizontalAlignment="Center">
-                        <Button x:Name="Btn_left" Width="40" Height="40" Margin="5" ToolTip="Сдвинуть выделенные точки влево" Click="Btn_left_Click" MouseEnter="Btn_left_MouseEnter" MouseLeave="Btn_left_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                            <Image  x:Name="Img_left" Source="Resources/move_left.png" Margin="2" Height="30" />
-                        </Button>
-
-                        <Button x:Name="Btn_rignt" Width="40" Height="40" Margin="5" ToolTip="Сдвинуть выделенные точки вправо" Click="Btn_rignt_Click" MouseEnter="Btn_rignt_MouseEnter" MouseLeave="Btn_rignt_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                            <Image  x:Name="Img_right" Source="Resources/move_right.png" Margin="2" Height="30" />
-                        </Button>
-
-                        <Button x:Name="Btn_up" Width="40" Height="40" Margin="5" ToolTip="Сдвинуть выделенные точки вверх" Click="Btn_up_Click" MouseEnter="Btn_up_MouseEnter" MouseLeave="Btn_up_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                            <Image  x:Name="Img_up" Source="Resources/move_up.png" Margin="2" Height="30" />
-                        </Button>
-
-                        <Button x:Name="Btn_down" Width="40" Height="40" Margin="5" ToolTip="Сдвинуть выделенные точки вниз" Click="Btn_down_Click" MouseEnter="Btn_down_MouseEnter" MouseLeave="Btn_down_MouseLeave" BorderBrush="#FF898686" Background="#FFF5F0F0">
-                            <Image  x:Name="Img_down" Source="Resources/move_down.png" Margin="2" Height="30" />
-                        </Button>
-                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical">
                             <Border BorderBrush="#FF7C7676" CornerRadius="5" BorderThickness="1" Margin="0 5">
                                 <StackPanel Orientation="Vertical" Margin="5">
                                     <ComboBox x:Name="TXT_size"></ComboBox>
@@ -148,49 +159,55 @@
                                         Текст
                                     </Button>
                                 </StackPanel>
-                                </Border>
+                            </Border>
 
                             <Border BorderBrush="#FF7C7676" CornerRadius="5" BorderThickness="1" >
                                 <StackPanel Orientation="Vertical" Margin="5">
                                     <ComboBox x:Name="Line_size"></ComboBox>
-                                    <Button x:Name="Btn_line"  Height="20" Margin="5" ToolTip="Добавить текст" Click="Btn_text_Click" BorderBrush="#FF898686" Background="#FFF5F0F0" FontWeight="Bold">
+                                    <Button x:Name="Btn_line"  Height="20" Margin="5" ToolTip="Добавить линию"  BorderBrush="#FF898686" Background="#FFF5F0F0" FontWeight="Bold">
                                         Линия
                                     </Button>
                                 </StackPanel>
                             </Border>
-                                
+
                         </StackPanel>
 
-                        <ScrollViewer Margin="5 0" VerticalScrollBarVisibility="Auto" Width="120">                                    
-                                <StackPanel x:Name="SP_color" Margin="0 5"  />                        
+                        <ScrollViewer Margin="5 0" VerticalScrollBarVisibility="Auto" Width="120">
+                            <StackPanel x:Name="SP_color" Margin="0 5"  />
                         </ScrollViewer>
-                       
+
                     </StackPanel>
 
                     <StackPanel>
                         <Label>Деталь</Label>
                         <TextBox x:Name="TB_Name" KeyDown="TB_Name_KeyDown" ></TextBox>
                         <Label>Детали:</Label>
-                        <ListBox x:Name="LB_names"> </ListBox>
-                    
+                        <ListBox x:Name="LB_names" SelectionChanged="LB_names_SelectionChanged"></ListBox>
+
                         <Button x:Name="Btn_show_det" Margin="10" Click="Btn_show_det_Click">Посмотреть координаты</Button>
+                        <Button x:Name="Btn_show_undo" Margin="10" Click="Btn_show_undo_Click">Посмотреть undo</Button>
                         <Label x:Name="LB_koord"></Label>
                         <Label x:Name="LB_info"></Label>
                         <Label x:Name="LB_otr"></Label>
+                        <Button x:Name="Btn_save_project" Margin="10" Click="Btn_save_project_Click">Сохранить проект</Button>
                     </StackPanel>
-                   
+                    <!-- <InkCanvas EditingMode="Select">
+                        <Polygon Fill="LightPink" Points="50, 150, 150, 50, 250, 150" x:Name="mycontrol" PreviewMouseDown="mycontrol_PreviewMouseDown" PreviewMouseMove="mycontrol_PreviewMouseMove" PreviewMouseUp="mycontrol_PreviewMouseUp" />
+
+                    </InkCanvas>-->
+
                 </StackPanel>
             </Border>
 
-            <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 100 40"  MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp" >
-               
-                    <Canvas   x:Name="Background"
+            <Canvas Grid.Column="1"  x:Name="MainCanvas" Margin="20 20 20 40"  MouseMove="MainCanvas_MouseMove" MouseLeftButtonDown="MainCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp" >
+
+                <Canvas   x:Name="Background"
                             Width="{Binding ActualWidth, ElementName=MainCanvas}"
                             Height="{Binding ActualHeight, ElementName=MainCanvas}"
                             SizeChanged="UpdateBackPattern"  />
-                
+
             </Canvas>
-           
+
 
         </Grid>
     </ScrollViewer>

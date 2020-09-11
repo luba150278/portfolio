@@ -48,6 +48,8 @@ namespace GoToKnit_
         List<Points_new> list_pnts = new List<Points_new>();
         List<Koord> list_det = new List<Koord>();       
         List<Point> tocki;
+        List<Undo> undo = new List<Undo>();
+        List<CountUndo> countUndo = new List<CountUndo>();
         bool prov_poligon = false;
         double BG_korr;
         Polygon main_polygon;
@@ -56,6 +58,10 @@ namespace GoToKnit_
         int[] arr_index;
         Color[] clr;
         Color br = Colors.Black;
+        int text_bold = 0;
+        //int count_undo = 0;
+        int indexUndoRedo;
+        public static List<Detali> res;
 
         public Frm_editor()
 		{
@@ -190,6 +196,41 @@ namespace GoToKnit_
             if(name_zap!= (sender as Rectangle).Name) rt.Stroke = Brushes.Black;
         }
 
+        class CountUndo
+        {
+            public int count_undo { get; set; }           
+            public string det { get; set; }
+
+            public CountUndo(int count_undo, string det)
+            {
+                this.det = det;
+                this.count_undo = count_undo;                
+            }
+        }
+        class Undo
+        {
+            //public List<Koord> list_new { get; set; }
+            public int last_index { get; set; }
+            public string det { get; set; }
+            public int n { get; set; }
+            public double x { get; set; }
+            public double y { get; set; }
+            public double pX { get; set; }
+            public double pY { get; set; }
+
+            public Undo(string det, int last_index, int n, double x, double y, double pX, double pY)
+            {               
+                this.det = det;
+                this.last_index = last_index;
+                this.n = n;
+                this.x = x;
+                this.y = y;
+                this.pX = pX;
+                this.pY = pY;
+            }
+
+            
+        }
         class Points_new // точки основного полигона в пикселях
         {
             public Points_new(int n, double X, double Y)
@@ -207,17 +248,21 @@ namespace GoToKnit_
 
         class Koord // точки основоного полигона приведеные к см
         {
-            public Koord(int n, double X, double Y, string det)
+            public Koord(int n, double X, double Y, double pX, double pY, string det)
             {
                 this.n = n;
                 this.X = X;//0
                 this.Y = Y;//1
+                this.pX = pX;//0
+                this.pY = pY;//1
                 this.det = det;//1
             }
 
             public int n { get; set; }
             public double X { get; set; }
             public double Y { get; set; }
+            public double pX { get; set; }
+            public double pY { get; set; }
             public string det { get; set; }
 
         }
@@ -264,8 +309,11 @@ namespace GoToKnit_
                 if (x % shag == 0)
                 {
                     z = 2;
-                    Tb_forline((x / ris).ToString(), true, x, -ris, Colors.Purple, true, 12);
-                    Tb_forline((x / ris).ToString(), true, x, h, Colors.Purple, true, 12);
+                    if (bg_clear)
+                    {
+                        Tb_forline((x / ris).ToString(), true, x, -ris, Colors.Purple, true, 12, "a");
+                        Tb_forline((x / ris).ToString(), true, x, h, Colors.Purple, true, 12, "a");
+                    }
                 }
                 AddLineToBackground(x, 0, x, h, z, Brushes.LightGray);
                 z = 1;
@@ -275,8 +323,11 @@ namespace GoToKnit_
                 if (y % shag == 0)
                 {
                     z = 2;
-                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, -20, y, Colors.Purple, true, 12);
-                    Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, w, y, Colors.Purple, true, 12);
+                    if (bg_clear)
+                    {
+                        Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, -20, y, Colors.Purple, true, 12, "a");
+                        Tb_forline(((ToInt32(h) - y) / ris).ToString(), false, w, y, Colors.Purple, true, 12, "a");
+                    }
 
                 }
                 AddLineToBackground(0, y, w, y, z, Brushes.LightGray);
@@ -310,19 +361,37 @@ namespace GoToKnit_
             foreach (Ellipse el1 in el) Panel.SetZIndex(el1, 9999);
         }
 
-        private void Tb_forline(string mstr, bool rot, double x, double y, Color clr, bool parent, double fs)// текстовые надписи; parent=true - background, false - main_canvas
+        private void Tb_forline(string mstr, bool rot, double x, double y, Color clr, bool parent, double fs, string s)// текстовые надписи; parent=true - background, false - main_canvas
         {
-                TextBlock tb = new TextBlock {
+            int last_index = 0;
+            
+            TextBlock tb = new TextBlock
+            {
                 Text = mstr,
                 Foreground = new SolidColorBrush(clr),
-                FontSize = fs
-                
-                }    ;
+                FontSize = fs         
+            }    ;
+            if (text_bold == 1) { tb.FontWeight = FontWeights.Bold; }
+            if (text_bold == 2) { tb.FontStyle = FontStyles.Italic; }
             if (rot == true) tb.LayoutTransform = new RotateTransform(-90);
             Canvas.SetLeft(tb, x);
             Canvas.SetTop(tb, y);
-            if (parent == true) { Background.Children.Add(tb); }
-            else { MainCanvas.Children.Add(tb); }
+            if (parent == true)
+            {
+                Background.Children.Add(tb);
+            }
+            else
+            {
+                var tb_prov = MainCanvas.Children.OfType<TextBlock>().ToList();
+                foreach (TextBlock tb1 in tb_prov)
+                {
+                    string name_txt = tb1.Name.Substring(0, 1);
+
+                    if (name_txt == s) { last_index++; }
+                }
+                tb.Name = s + (last_index + 1);
+                MainCanvas.Children.Add(tb);
+            }
         }
 
         private void Btn_dec_Click(object sender, RoutedEventArgs e)//уменьшение сетки на канвас
@@ -567,7 +636,7 @@ namespace GoToKnit_
             var pg=Background.Children.OfType<Polygon>().ToList();
             foreach (Polygon pg_ch in pg) Background.Children.Remove(pg_ch);
             prov_poligon = false;            
-            Draw_poligon();
+            Draw_poligon(false);
             //Pixel_to_koord();
 
         }
@@ -609,16 +678,16 @@ namespace GoToKnit_
                 list_main = new List<Points_new>();
                 count_pnts = 1;
                 prov_poligon = false;
-                
-                if (LB_names.SelectedIndex!=-1)
-                {
-                    int index = LB_names.SelectedIndex;
-                    string det = LB_names.SelectedItem.ToString();
-                    list_det.RemoveAll(x => x.det == det);
-                   
-                    LB_names.Items.Remove(LB_names.SelectedItem);
-                }
-                
+
+                //if (LB_names.SelectedIndex!=-1)
+                //{
+                //    int index = LB_names.SelectedIndex;
+                string det = LB_names.SelectedItem.ToString();
+                list_det.RemoveAll(x => x.det == det);
+
+                //    LB_names.Items.Remove(LB_names.SelectedItem);
+                //}
+
             }
 
             list_main.Clear();
@@ -639,28 +708,32 @@ namespace GoToKnit_
 
         private void Window_KeyDown(object sender, KeyEventArgs e)//клавиши как дополнительные действия
         {
-            if (e.Key == Key.LeftShift)//замкнуть полигон
-            {                
-                int cnt = pnts.Count - 1;
-                
-                if (cnt > 1)
-                {                    
-                    Prov_points();
-                    Draw_poligon();                   
+            try
+            {
+                if (e.Key == Key.LeftShift)//замкнуть полигон
+                {
+                    int cnt = pnts.Count - 1;
+
+                    if (cnt > 1)
+                    {
+                        Prov_points();
+                        Draw_poligon(false);
+                    }
+                }
+                if (e.Key == Key.LeftCtrl)//симметриная часть и замкнуть полигон
+                {
+                    Draw_sim();
+                    polyline = null;
+                    segment.Points.Clear();
+                    Background.Children.Remove(segment);
+                    prov_poligon = true;
+                }
+                if (e.Key == Key.Escape)//отмена действий
+                {
+                    Esc_call();
                 }
             }
-            if(e.Key == Key.LeftCtrl)//симметриная часть и замкнуть полигон
-            {
-                Draw_sim();
-                polyline = null;
-                segment.Points.Clear();
-                Background.Children.Remove(segment);
-                prov_poligon = true;
-            }
-            if(e.Key==Key.Escape)//отмена действий
-            {
-                Esc_call();                
-            }
+            catch { }
         }
 
         private void Btn_sim_Click(object sender, RoutedEventArgs e)//симметричная часть полигона - рисуем по нажатию кнопки
@@ -693,7 +766,7 @@ namespace GoToKnit_
                 }
                
                 
-                Draw_poligon();
+                Draw_poligon(false);
                 prov_poligon = true;
                 //Del_all(false);
             }
@@ -817,29 +890,36 @@ namespace GoToKnit_
 
         private void TB_Name_KeyDown(object sender, KeyEventArgs e)//ввод новой детали на выкройку
         {
-            if (e.Key == Key.Enter)
+            try
             {
-                if (LB_names.Items.Count > 0)
+                if (e.Key == Key.Enter)
                 {
+                    if (LB_names.Items.Count > 0)
+                    {
+                        for (int i = 0; i < LB_names.Items.Count; i++)
+                        {
+                            if (LB_names.Items[i].ToString().ToLower() == TB_Name.Text.ToLower())
+                            {
+                                MessageBox.Show("Деталь с таким наименованием уже есть");
+                                return;
+                            }
+                        }
+                    }
+                    LB_names.Items.Add(TB_Name.Text);
                     for (int i = 0; i < LB_names.Items.Count; i++)
                     {
                         if (LB_names.Items[i].ToString().ToLower() == TB_Name.Text.ToLower())
                         {
-                            MessageBox.Show("Деталь с таким наименованием уже есть");
+                            LB_names.SelectedIndex = i;
+                            Save_det();
                             return;
                         }
                     }
+
                 }
-                LB_names.Items.Add(TB_Name.Text);
-                for (int i = 0; i < LB_names.Items.Count; i++)
-                {
-                   if( LB_names.Items[i].ToString().ToLower() == TB_Name.Text.ToLower())
-                   {
-                        LB_names.SelectedIndex = i;
-                        Save_det();
-                        return;
-                   }
-                }
+            }
+            catch
+            {
 
             }
         }
@@ -848,7 +928,7 @@ namespace GoToKnit_
         {
             if (main_polygon.Points.Count == 0) return;
             //Pixel_to_koord();
-            bool prov_exist_koord = false;
+            //bool prov_exist_koord = false;
             if (LB_names.Items.Count > 0)
             {
                 if (LB_names.SelectedIndex == -1)
@@ -859,25 +939,8 @@ namespace GoToKnit_
                 else
                 {
                     string det = LB_names.SelectedItem.ToString();
-                    if (list_det.Count > 0)
-                    {
-                        List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
-                        if (prov.Count > 0)
-                        {
-                            MessageBoxResult qu = MessageBox.Show("Для данной детали координаты уже введены. Обновить данные?", "Сохранить координаты детали", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                            switch (qu)
-                            {
-                                case MessageBoxResult.Yes:
-                                    prov_exist_koord = true;
-                                    break;
-                                case MessageBoxResult.No:
-                                    return;
-
-                            }
-                        }
-                    }
-
-                    Add_koord_det(det, prov_exist_koord);
+                    countUndo.Add(new CountUndo(0, det));
+                    saveDetProv(det);
                 }
             }
             else
@@ -886,6 +949,30 @@ namespace GoToKnit_
             }
         }
 
+        void saveDetProv(String det)
+        {
+            
+            bool prov_exist_koord = false;
+            if (list_det.Count > 0)
+            {
+                List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
+                if (prov.Count > 0) prov_exist_koord = true;
+                //{
+                //    MessageBoxResult qu = MessageBox.Show("Для данной детали координаты уже введены. Обновить данные?", "Сохранить координаты детали", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                //    switch (qu)
+                //    {
+                //        case MessageBoxResult.Yes:
+                //            prov_exist_koord = true;
+                //            break;
+                //        case MessageBoxResult.No:
+                //            return;
+
+                //    }
+                //}
+            }
+
+            Add_koord_det(det, prov_exist_koord);
+        }
         private void Btn_save_det_Click(object sender, RoutedEventArgs e)//сохранение детали по нажатию кнопки
         {
             Save_det();
@@ -893,7 +980,8 @@ namespace GoToKnit_
 
         private void Add_koord_det(string det, bool prov)//prov ==true деталь уже есть. Обновляем данные Сохранение привязки координат
         {
-            if(prov==true)//удаляем предыдущие координаты детали
+          
+            if (prov==true)//удаляем предыдущие координаты детали
             {
                 list_det.RemoveAll(x => x.det == det);
             }
@@ -901,9 +989,10 @@ namespace GoToKnit_
             //MessageBox.Show(""+ list_main.Count);
             for(int i=0; i<list_main.Count;i++)
             {
-                list_det.Add(new Koord(list_main[i].n, list_main[i].X, list_main[i].Y, det)) ;
+                list_det.Add(new Koord(list_main[i].n, list_main[i].X, list_main[i].Y, main_polygon.Points[i].X, main_polygon.Points[i].Y, det)) ;
             }
-            MessageBox.Show("Деталь добавлена");
+            //MessageBox.Show("Деталь добавлена");
+            AddUndo();
         }
 
 
@@ -1051,11 +1140,10 @@ namespace GoToKnit_
 
         }
 
-        private void Draw_poligon()//рисуем/перерисовываем полигон
+        private void Draw_poligon(bool undo)//рисуем/перерисовываем полигон
         {
             if (prov_poligon == false)
-            {
-                
+            {                
                 main_polygon = new Polygon();
                 main_polygon.Stroke = Brushes.Black;
                 main_polygon.StrokeThickness = 2;
@@ -1094,8 +1182,8 @@ namespace GoToKnit_
                 segment.Points.Clear();
                 Background.Children.Remove(segment);
                 prov_poligon = true;
-               
-                Info_label();
+
+               if(!undo) EditDataVikr();
             }
         }
 
@@ -1151,7 +1239,7 @@ namespace GoToKnit_
             return Math.Round(-sum_squ/2, 1);
         }
 
-        void Esc_call()//отмена вложенная функция
+        void Esc_call ()//отмена вложенная функция
         {
             try
             {
@@ -1322,7 +1410,12 @@ namespace GoToKnit_
 
                     Background.Children.Remove(main_polygon);
                     prov_poligon = false;
-                    Draw_poligon();
+                    Draw_poligon(false);
+                    if (main_polygon.Points.Count <= 3)
+                    {
+                        prov_del_point = false;
+                        Cnange_img(Img_del_point, "Resources/del_point.png", false);
+                    }
                 }
            
             }
@@ -1492,7 +1585,7 @@ namespace GoToKnit_
                     prov_size = false;
                 }
 
-                prov_ell_click = false;
+                prov_ell_click = false;               
             }
             catch
             {                
@@ -1525,8 +1618,8 @@ namespace GoToKnit_
 
             for (int i = 0; i < main_polygon.Points.Count; i++) Make_ellipse(main_polygon.Points[i].X, main_polygon.Points[i].Y, true);
             //Pixel_to_koord();
-            Info_label();
-            Ellip_events();
+            EditDataVikr();
+            Ellip_events();          
         }
 
         private void Control_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)//выделение полигона для перемещения
@@ -1589,7 +1682,8 @@ namespace GoToKnit_
                 Change_poligon();
                 Trans_polygon(sender);
                 prov_polygon_click = false;
-                Size_del();
+                //Size_del();
+                EditDataVikr();
             }
             catch
             {
@@ -1717,7 +1811,7 @@ namespace GoToKnit_
             if (cnt > 1)
             {                
                 Prov_points();
-                Draw_poligon();                
+                Draw_poligon(false);                
             }
             else
             {
@@ -1799,8 +1893,7 @@ namespace GoToKnit_
                     Make_ellipse(pnt.X, pnt.Y, true);
                 }
 
-                Esc_call();
-                Info_label();
+                EditDataVikr();
             }            
         }
 
@@ -1853,9 +1946,7 @@ namespace GoToKnit_
                     main_polygon.Points[arr_index[i]] = pnt;
                     Make_ellipse(pnt.X, pnt.Y, true);
                 }
-
-                Esc_call();
-                Info_label();
+                EditDataVikr();
             }
         }
 
@@ -1903,8 +1994,7 @@ namespace GoToKnit_
                     main_polygon.Points[arr_index[i]] = pnt;
                     Make_ellipse(pnt.X, pnt.Y, true);
                 }
-                Esc_call();
-                Info_label();
+                EditDataVikr();
             }
         }
 
@@ -1932,11 +2022,20 @@ namespace GoToKnit_
                     main_polygon.Points[arr_index[i]] = pnt;
                     Make_ellipse(pnt.X, pnt.Y, true);
                 }
-                Esc_call();
-                Info_label();
+                EditDataVikr();
             }
         }
 
+        private void EditDataVikr()
+        {
+            Size_del();
+            Esc_call();
+            Info_label();
+            Save_det();
+            some_points = false;            
+            Cnange_img(Img_some, "Resources/select.png", false);
+            
+        }
         private void Btn_down_MouseEnter(object sender, MouseEventArgs e)
         {
             Cnange_img(Img_down, "Resources/move_down1.png", true);
@@ -1981,6 +2080,8 @@ namespace GoToKnit_
                 else
                 {
                     MessageBox.Show("Нет смысла удалять точки у контура с количеством точек равным 3. Удалите весь контур");
+                    //prov_del_point = false;
+                    Cnange_img(Img_del_point, "Resources/del_point.png", false);
                 }
             }
             catch { MessageBox.Show("Функция доступна только для существющего контура. Создайте его"); }
@@ -2000,10 +2101,20 @@ namespace GoToKnit_
         {
             var ln = MainCanvas.Children.OfType<Line>().ToList();
             foreach (Line ln1 in ln) MainCanvas.Children.Remove(ln1);
-            var tb = MainCanvas.Children.OfType<TextBlock>().ToList();
-            foreach (TextBlock tb1 in tb) MainCanvas.Children.Remove(tb1);
+            Text_del("t");
             prov_size = false;
             //return;
+        }
+
+        void Text_del(string s)
+        {
+            var tb = MainCanvas.Children.OfType<TextBlock>().ToList();
+            foreach (TextBlock tb1 in tb)
+            {
+                string name_txt = tb1.Name.Substring(0, 1);
+                //MessageBox.Show(name_txt);
+                if (name_txt == s) { MainCanvas.Children.Remove(tb1); }
+            }
         }
         private void Btn_size_Click(object sender, RoutedEventArgs e)//включить/отключить размерные линии и надписи на полигоне
         {
@@ -2055,7 +2166,7 @@ namespace GoToKnit_
                             str = Math.Round((Math.Abs(y1 - y2) / 10), 1).ToString();
                             p = 0;
                             _ = prov % 2 == 0 ? p = x2 + k * 1.2 : p = x2 - n;
-                            Tb_forline(str, true, p, (y1 + y2) / 2 - 5, Colors.Red, false, 12);
+                            Tb_forline(str, true, p, (y1 + y2) / 2 - 5, Colors.Red, false, 12,"t");
                         }
                         else if (Math.Round(Math.Abs(y1 - y2), 0) <= 3)//горизонтальная
                         {
@@ -2072,7 +2183,7 @@ namespace GoToKnit_
                             str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
                             p = 0;
                             _ = prov % 2 != 0 ? p = y1 + k * 1.2 : p = y1 - n;
-                            Tb_forline(str, false, (x1 + x2) / 2 - 5, p, Colors.Red, false, 12);
+                            Tb_forline(str, false, (x1 + x2) / 2 - 5, p, Colors.Red, false, 12, "t");
                         }
                         else//наклонные
                         {
@@ -2090,23 +2201,23 @@ namespace GoToKnit_
                                 {
                                     AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная  
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();                                   
-                                    Tb_forline(str, true, x2-k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x2-k, y_in_text, Colors.Red, false, 12,"t");
 
                                    
                                     AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();                                    
-                                    Tb_forline(str, false, x_in_text , y1-k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text , y1-k, Colors.Red, false, 12, "t");
                                 }
                                 else
                                 {
                                     AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная   
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12, "t");
 
 
                                     AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12, "t");
                                 }
                             }
 
@@ -2117,21 +2228,21 @@ namespace GoToKnit_
                                 {
                                     AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная    
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12, "t");
                                 }
                                 else
                                 {
                                     AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная    
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12, "t");
                                 }
 
                            }
@@ -2143,21 +2254,21 @@ namespace GoToKnit_
                                 {
                                     AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная  
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12, "t");
                                 }
                                 else
                                 {
                                     AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная   
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12, "t");
                                 }
 
                             }
@@ -2169,21 +2280,21 @@ namespace GoToKnit_
                                 {
                                     AddLineToSize(x2, y1, x2, y2, Brushes.Blue);//вертикальная 
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x2 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y1, x2, y1, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y1 - k, Colors.Red, false, 12, "t");
                                 }
                                 else
                                 {
                                     AddLineToSize(x1, y1, x1, y2, Brushes.Blue);//вертикальная 
                                     str = Math.Round(Math.Abs(y1 - y2) / 10, 1).ToString();
-                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12);
+                                    Tb_forline(str, true, x1 - k, y_in_text, Colors.Red, false, 12, "t");
 
                                     AddLineToSize(x1, y2, x2, y2, Brushes.Blue);//горизонт
                                     str = Math.Round((Math.Abs(x1 - x2) / 10), 1).ToString();
-                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12);
+                                    Tb_forline(str, false, x_in_text, y2 - k, Colors.Red, false, 12, "t");
                                 }
 
                             }
@@ -2213,20 +2324,25 @@ namespace GoToKnit_
                 el_ch.Name = "l" + i;
                 i++;
             }
+            
+            Text_events();
+        }
 
-            i = 0;
+        private void Text_events()
+        {
+            
+            List<TextBlock> tb = MainCanvas.Children.OfType<TextBlock>().ToList();
 
-            var tb = MainCanvas.Children.OfType<TextBlock>().ToList();
-
+            int i = 1;
             foreach (TextBlock el_ch in tb)
             {
+                el_ch.Name = "t" + i;
                 el_ch.MouseLeftButtonDown += new MouseButtonEventHandler(TB_MouseLeftButtonDown);
                 el_ch.MouseMove += new MouseEventHandler(TB_MouseMove);
                 el_ch.MouseLeftButtonUp += new MouseButtonEventHandler(TB_MouseLeftButtonUp);
-                el_ch.Name = "t" + i;
                 i++;
+              
             }
-
         }
 
         private void Line_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -2244,6 +2360,7 @@ namespace GoToKnit_
             catch 
             { }
         }
+      
 
         private void Line_MouseMove(object sender, MouseEventArgs e)
         {
@@ -2298,16 +2415,25 @@ namespace GoToKnit_
             }
         }
 
+        string name_p;
+
         //------------------------------------------------------
         private void TB_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
+               
                 prov_tb_click = true;
-                isDragging = true;
+                isDragging = true;               
                 var lc = (sender as TextBlock);
+                string prov_name = lc.Name;
+                if (prov_name != name_p)
+                {
+                    prevX = 0;
+                    prevY = 0;
+                }
                 //lc.Stroke = Brushes.Red;
-                mousePosition = e.GetPosition(this);
+                mousePosition = e.GetPosition(this.Parent as UIElement);
                 lc.CaptureMouse();
 
             }
@@ -2319,10 +2445,13 @@ namespace GoToKnit_
         {
             try
             {
+               
                 var lc = (sender as TextBlock);
+                string prov_name = lc.Name;
                 if (isDragging && lc != null)
                 {
-                    var currentPosition = e.GetPosition(this);
+                    var currentPosition = e.GetPosition(this.Parent as UIElement);
+                    
                     var transform = (lc.RenderTransform as TranslateTransform);
                     if (transform == null)
                     {
@@ -2330,14 +2459,18 @@ namespace GoToKnit_
                         lc.RenderTransform = transform;
                     }
                     //if (Math.Abs(transform.X) < 3 && Math.Abs(transform.Y) < 3) return;
-                    transform.X = (currentPosition.X - mousePosition.X);
-                    transform.Y = (currentPosition.Y - mousePosition.Y);
-                    if (prevX > 0)
+                    if (prov_name == name_p)
                     {
-                        transform.X += prevX;
-                        transform.Y += prevY;
+                        transform.X = (currentPosition.X - mousePosition.X) + prevX;
+                        transform.Y = (currentPosition.Y - mousePosition.Y) + prevY;
                     }
-
+                    else
+                    {
+                        transform.X = currentPosition.X - mousePosition.X;
+                        transform.Y = currentPosition.Y - mousePosition.Y;
+                    }
+                                      
+                    
                 }
             }
             catch { }
@@ -2350,17 +2483,21 @@ namespace GoToKnit_
                 isDragging = false;
                 var lc = (sender as TextBlock);
                 var transform = (lc.RenderTransform as TranslateTransform);
-
+               
                 if (transform != null)
                 {
                     prevX = transform.X;
                     prevY = transform.Y;
                 }
+               
                 lc.ReleaseMouseCapture();
                 //lc.Stroke = Brushes.Blue;
                 prov_tb_click = false;
-                prevX = 0;
-                prevY = 0;
+                //prevX = 0;
+                //prevY = 0;
+                name_p = lc.Name;
+
+
             }
             catch
             {
@@ -2489,10 +2626,91 @@ namespace GoToKnit_
         {
             string str = TXT_input.Text;
             double fs = ToDouble(TXT_size.SelectedItem);
-            Tb_forline(str, false, 0, 0, br, false, fs);
+            text_bold = TXT_Bold.SelectedIndex;
+            Tb_forline(str, false, 100, 100, br, false, fs, "q");
+            Text_events();
+            text_bold = 0;
         }
 
-        void Change_poligon()// изменение полигона
+        Point p;
+        bool canmove = false;
+             
+        private void mycontrol_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Control c = sender as Control;
+            Mouse.Capture(c);
+            p = Mouse.GetPosition(c);
+            canmove = true;
+        }
+
+        private void mycontrol_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (canmove)
+            {
+                Control c = sender as Control;
+                c.SetValue(InkCanvas.LeftProperty, e.GetPosition(null).X - p.X);
+                c.SetValue(InkCanvas.TopProperty, e.GetPosition(null).Y - p.Y);
+            }
+        }
+
+        private void mycontrol_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Mouse.Capture(null);
+            canmove = false;
+        }
+
+        private void LB_names_SelectionChanged(object sender, SelectionChangedEventArgs e)//Рисуем выбранную деталь(!сохранить предыдущую)
+        {
+            //Add_koord_det(det, prov_exist_koord);
+            try
+            {
+                if (LB_names.Items.Count > 0)
+                {
+                    string det = LB_names.SelectedItem.ToString();
+                    List<Koord> prov = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
+                    createPntsArray(prov, true);
+                    List<Undo> prov_undo = undo.FindAll(item => item.det.ToLower() == det.ToLower());
+                    int last_index = prov_undo.Max(x => x.last_index);
+                    int last_redo = countUndo.FindAll(item => item.det.ToLower() == det.ToLower())[0].count_undo;
+                    if (last_index > 1)
+                    {
+                        MessageBox.Show("ind" + last_index + "red" + last_redo);
+                        Cnange_img(Img_undo, "Resources/undo1.png", true);
+                        if (last_redo < last_index && last_redo!=0) { Cnange_img(Img_redo, "Resources/redo1.png", true); }
+                        else { Cnange_img(Img_redo, "Resources/redo.png", true); }
+                    }
+                    else
+                    {
+                        Cnange_img(Img_undo, "Resources/undo.png", true);
+                        Cnange_img(Img_redo, "Resources/redo.png", true);
+                       
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+        }
+
+        private void createPntsArray(List<Koord> prov, bool undo)
+        {
+            if (prov.Count > 0)
+            {
+                pnts = new List<Points_new>();
+                for (int i = 0; i < prov.Count; i++)
+                {
+                    pnts.Add(new Points_new(i, prov[i].pX, prov[i].pY));
+                }
+                //MainCanvas.Children.Clear();
+                prov_poligon = false;
+                Background.Children.Remove(main_polygon);
+                Draw_poligon(undo);
+            }
+        }
+
+        private void Change_poligon()// изменение полигона
         {
             List<Polygon> pg = Background.Children.OfType<Polygon>().ToList();
             main_polygon = new Polygon { Stroke = Brushes.Black, StrokeThickness = 2 };
@@ -2509,6 +2727,95 @@ namespace GoToKnit_
             Background.Children.Add(main_polygon);
             Add_polygon_events();          
 
+        }
+
+        private void Btn_show_undo_Click(object sender, RoutedEventArgs e)
+        {
+            string str = "";           
+                foreach (Undo x in undo)
+                {
+                    str += ":" + x.det + "i:" + x.last_index + "n:" + x.n + "x:" + x.x + ":" + x.y + "\n";                  
+
+                }
+            
+            MessageBox.Show(str);
+        }
+
+        private void Btn_undo_Click(object sender, RoutedEventArgs e)
+        {
+            UndoRedoPolygon(LB_names.SelectedItem.ToString(), true);
+        }
+
+        private void Btn_redo_Click(object sender, RoutedEventArgs e)
+        {  
+            UndoRedoPolygon(LB_names.SelectedItem.ToString(), false);
+        }
+
+       private void UndoRedoPolygon(string det, bool undoBool)
+       {
+           
+            List<Undo> prov = undo.FindAll(item => item.det.ToLower() == det.ToLower());
+            if (prov.Count > 0)
+            {
+                int count_undo = 0;
+                int last_index = prov.Max(x => x.last_index);
+                List<CountUndo> prov_count = countUndo.FindAll(item => item.det.ToLower() == det.ToLower());
+                if (last_index>1)
+                {
+                    count_undo = prov_count[0].count_undo;
+                    
+                    _ = (undoBool) ? count_undo-- : count_undo++;
+                   
+                    indexUndoRedo = last_index + count_undo;
+                    
+                    if (count_undo == 0)
+                    {
+                        Cnange_img(Img_redo, "Resources/redo.png", true);
+                    }
+                    else
+                    {
+                        Cnange_img(Img_redo, "Resources/redo1.png", true);
+                    }
+                    //здесь отрисовываем новый полигон
+                    List<Undo> coord = prov.FindAll(item => item.last_index == indexUndoRedo);
+                    List<Koord> poly = new List<Koord>();
+                    for (int i = 0; i < coord.Count; i++)
+                    {
+                        poly.Add(new Koord(i, coord[i].x, coord[i].y, coord[i].pX, coord[i].pY, det));
+                    }
+                    createPntsArray(poly, true);
+
+
+                    if (indexUndoRedo == 1) {
+                        Cnange_img(Img_undo, "Resources/undo.png", true);
+                        //return; 
+                    }
+                    else
+                    {
+                        Cnange_img(Img_undo, "Resources/undo1.png", true);
+                    }
+
+                    if (indexUndoRedo == 0)
+                    {
+                        return;
+                    }
+                   
+                    //Обновляем индекс в массиве
+                    countUndo
+                    .FindAll(item => item.det.ToLower() == det.ToLower())
+                    .ForEach(x => x.count_undo = count_undo);              
+                }
+               
+            }            
+       }
+
+        private void Btn_save_project_Click(object sender, RoutedEventArgs e)
+        {
+            res = new List<Detali>();//Сохраняем выкройки в проект
+            for(int i=0; i<list_det.Count; i++)
+            {
+               // res.Add(new Detali(i + 1,));
+            }
         }
 
         void Trans_polygon(object sender)//перемещение вершин полигона при перемещении полигона
@@ -2550,16 +2857,47 @@ namespace GoToKnit_
                     LB_koord.Content = transform.X.ToString() + ";" + transform.Y.ToString();
 
                     var el = Background.Children.OfType<Ellipse>().ToList();
-                    foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);
+                    foreach (Ellipse fld_d in el) Background.Children.Remove(fld_d);                    
                 }
             }
-            catch { }
-            //draggableControl.Stroke = Brushes.Black;           
+            catch { }                     
         }
-        
-    
+
+        private void AddUndo()
+        {
+            string det = LB_names.SelectedItem.ToString();
+            MessageBox.Show(det);
+            int last_index = 1;
+
+                List<Undo> prov = undo.FindAll(item => item.det.ToLower() == det.ToLower());
+            if (prov.Count > 0)
+            {
+                last_index = prov.Max(x => x.last_index);
+                last_index++;
+            }
+            
+            List<Koord> prov_det = list_det.FindAll(item => item.det.ToLower() == det.ToLower());
+            if (prov_det.Count > 0)
+            {
+                foreach (Koord item in prov_det)
+                {
+                    undo.Add(new Undo(det, last_index, item.n, item.X, item.Y, item.pX, item.pY));
+                }                
+            }
+
+            if (last_index > 1)
+            {
+                Cnange_img(Img_undo, "Resources/undo1.png", true);
+            }
+           
+        }         
     }    
 }
+
+//Изменение записи в списке
+//lstSomeStructures
+//.FindAll(s => s.IntStructureType == 4)
+//.ForEach(x => x.strStructureColor = "red");
 
 //Рисование прямоугольника по клеткам канваса
 

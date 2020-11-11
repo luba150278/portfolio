@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part2 addedValueToFormula" />
+    </entry_points>
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part2" />
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part2" method="checkOrderMathSymbols" />
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part2" method="main" />
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part3" />
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part3" method="checkOrderMathSymbols" />
+    <pattern value="com.shpp.p2p.cs.lmyetolkina.assignment11.Assignment11Part3" method="main" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

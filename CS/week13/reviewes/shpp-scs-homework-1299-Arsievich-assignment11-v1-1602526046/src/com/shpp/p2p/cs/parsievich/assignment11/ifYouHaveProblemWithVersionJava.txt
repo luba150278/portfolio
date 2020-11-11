@@ -1,0 +1,35 @@
+private static double doBinaryOperation(double firstNumber, double secondNumber, String operation) {
+        switch (operation) {
+            case "^":
+                return Math.pow(firstNumber, secondNumber);
+            case "*":
+                return (firstNumber * secondNumber);
+            case "/":
+                return (firstNumber / secondNumber);
+            case "+":
+                return (firstNumber + secondNumber);
+            case "-":
+                return (firstNumber - secondNumber);
+        }
+        return 404;
+    }
+
+    private static double doUnaryOperation(double number, String operation) {
+        switch (operation) {
+            case "sin":
+                return Math.sin(number);
+            case "cos":
+                return Math.cos(number);
+            case "tan":
+                return Math.tan(number);
+            case "atan":
+                return Math.atan(number);
+            case "log10":
+                return Math.log(number);
+            case "log2":
+                return Math.log10(number);
+            case "sqrt":
+                return Math.sqrt(number);
+        }
+        return 404;
+    }

@@ -1,0 +1,17 @@
+block config
+ include config.pug
+
+ mixin slide(src, active)
+  div(class="carousel-item "+active)
+   img.d-block.w-100(src = src)
+
+doctype html
+html
+ head
+  include head.pug
+body
+ include navigation.pug
+ block content
+
+footer
+ include footer.pug

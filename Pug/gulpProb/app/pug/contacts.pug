@@ -1,0 +1,23 @@
+extends includes/mainTemplate.pug
+
+append config
+  - title = "Контакты"
+  -let currentURL = "contacts.html"
+
+block title
+ |#{title}
+
+block content
+ section
+  .container
+   div#carouselExampleControls.carousel.slide(data-ride="carousel")
+    div.carousel-inner
+      +slide('http://placeimg.com/640/480/arch?t=1549217807227', 'active')
+      +slide('http://placeimg.com/640/480/arch?t=1549217807228', '')
+      +slide('http://placeimg.com/640/480/arch?t=1549217807229', '')
+    a.carousel-control-prev(href="#carouselExampleControls" role="button" data-slide="prev")
+     span.carousel-control-prev-icon(aria-hidden="true")
+     span.sr-only Previous  
+    a.carousel-control-next(href="#carouselExampleControls" role="button" data-slide="next")
+     span.carousel-control-next-icon(aria-hidden="true")
+     span.sr-only Next

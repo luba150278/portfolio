@@ -1,0 +1,24 @@
+extends includes/mainTemplate.pug
+
+append config
+  - title = "Главная страница"
+  -let currentURL = "index.html"
+
+block title
+ |#{title}
+
+block content
+ section.top
+  .container
+   .row
+    .col-md-3
+     p
+      |Люба
+    .col-md-6
+     p
+      |Маша
+    .col-md-3
+     p
+      |#{title}
+ script.
+  console.log("lllllllllllll")

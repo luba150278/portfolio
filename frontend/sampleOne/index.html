@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+      <meta charset="utf-8">
+      <title>Любовь Метёлкина | Frontend Developer
+      </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    </head>
+  </head>
+</html>
+<body>
+  <section id="home">
+    <div class="container"> 
+      <nav>
+        <ul>
+          <li class="nav-item"> <a href="#home">Home</a></li>
+          <li class="nav-item"><a href="#aboutMe">About me</a></li>
+          <li class="nav-item"><a href="#skills">Skills</a></li>
+          <li class="nav-item"><a href="#portfolio">Portfolio</a></li>
+          <li class="nav-item"><a href="#contacts">Contacts</a></li>
+        </ul>
+        <hr>
+      </nav>
+    </div>
+  </section>
+  <section id="firstFrame">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h1>Olga<br>Novik</h1>
+        </div>
+        <div class="col-md-4 short-about">
+          <p>
+             UI/UX Designer<br>24 years old, Minsk</p>
+        </div>
+        <div class="col-md-4 lang">
+          <ul>
+            <li>
+              <p class="active">|ENG</p>
+            </li>
+            <li> 
+              <p>RU</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="img"><img src="images/dest/ava.jpg"></div>
+    </div>
+  </section>
+  <section id="aboutMe">
+    <div class="container">
+      <div class="inner-aboutMe">
+        <h2>About me</h2>
+        <p>
+          Hi, I'm Denis – UX/UI designer from Minsk. <br>I'm interested in design and everything connected with it.</p>
+        <p>
+          I'm studying at courses "Web and mobile design<br>interfaces" in IT-Academy.</p>
+        <p>
+          Ready to implement excellent projects<br>with wonderful people.</p>
+      </div>
+    </div>
+  </section>
+  <section id="skills">
+    <div class="container">
+      <div class="title-skills">
+        <h2>Skills</h2>
+        <p>I work in such programs as</p>
+      </div>
+      <div class="row">
+        <div class="col-md-3 item-skill"><img class="logo" src="images/dest/ps.svg">
+          <p>Adobe|<br>Photoshop</p><img class="star" src="images/dest/star4.svg">
+        </div>
+        <div class="col-md-3 item-skill"><img class="logo" src="images/dest/ai.svg">
+          <p>Adobe|<br>Illustrator</p><img class="star" src="images/dest/star3.svg">
+        </div>
+        <div class="col-md-3 item-skill"><img class="logo" src="images/dest/ae.svg">
+          <p>Adobe|<br>After Effects</p><img class="star" src="images/dest/star4.svg">
+        </div>
+        <div class="col-md-3 item-skill"><img class="logo" src="images/dest/fi.svg">
+          <p>Figma         </p><img class="star star-last" src="images/dest/star4.svg">
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="portfolio">
+    <div class="container">
+      <div class="title-portfolio">
+        <h2>Portfolio</h2><img src="images/dest/pf1.jpg"><a href="#">Online fashion store - Homepage</a><img class="not-first-img" src="images/dest/pf2.jpg"><a href="#">Reebok Store - Concept</a><img class="not-first-img" src="images/dest/pf3.jpg"><a href="#">Braun Landing Page - Concept</a>
+      </div>
+    </div>
+  </section>
+  <section id="contacts">
+    <div class="container">
+      <div class="title-contacts">
+        <h2>Contacts</h2>
+        <p>Want to know more or just chat?<br>You are welcome!</p>
+        <button>Send message</button>
+        <div class="row">
+          <div class="col-md-3 soc"><a href="#"><img src="images/dest/soc-in.svg"></a></div>
+          <div class="col-md-3 soc"><a href="#"><img src="images/dest/soc-i.svg"></a></div>
+          <div class="col-md-3 soc"><a href="#"><img src="images/dest/soc-bi.svg"></a></div>
+          <div class="col-md-3 soc"><a href="#"><img src="images/dest/soc-ball.svg"></a></div>
+        </div>
+        <p class="like-me">Like me on<br>LinkedIn, Instagram, Behance, Dribble</p>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <script src="https://kit.fontawesome.com/e7522be2b2.js" crossorigin="anonymous"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/app.min.css">
+    <script src="js/app.min.js"></script>
+  </footer>
+</body>
